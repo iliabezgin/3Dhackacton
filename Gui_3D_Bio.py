@@ -160,11 +160,13 @@ class Gui_3D_Bio:
             thirdPlotLabel.pack(side='top', fill='both')
             self.__informativeLabels.append(thirdPlotLabel)
 
-        checkSizeLabel = Label(self.__middleBottomFrame,
-                               text=self.__locationToSave.get(),
-                               fg='blue')
-        checkSizeLabel.pack(side='top', fill='both')
-        self.__informativeLabels.append(checkSizeLabel)
+        main_model.create_model(self.__givenSequence, 10,
+                                self.__locationToSave, self.__beadRadiusSize,
+                                self.__sphereRadiusSize,
+                                self.__kbsValue, 5, self.__kInSize,
+                                self.__kOutSize)
+
+
 
     def dark_light_switch(self):
 
@@ -453,8 +455,5 @@ def main():
     kbs = program.get_kbs()
     k_in = program.get_k_in()
     k_out = program.get_k_out()
-
-    main_model.create_model(seq, 10, path, bead_radius, sphere_radius,
-                            kbs, 5, k_in, k_out)
 
     root.mainloop()
