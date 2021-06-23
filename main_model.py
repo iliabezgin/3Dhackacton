@@ -3,7 +3,7 @@ from dynamics import *
 bd_step_size_fs = 1000.0  # simulation time step in femotoseconds (10^-15 sec)
 
 
-def create_model(rmf_filename):
+def create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs,nres_per_bead, k_in, k_out):
 	"""## Building a dynamic model - parts, interactions, dynamics
 	OK, let's begin by building our first dynamic model!
 	As we learned in class, a dynamic model stands on three pillars:
@@ -28,18 +28,20 @@ def create_model(rmf_filename):
 
 	protein_chain_factory = ProteinChainFactory \
 		(model=m,  # the model in which the beads reside
-		 default_radius_A=10.0,  # radius of a bead
-		 k_kcal_per_mol_per_A2=5.0,
+		 default_radius_A=bead_radius,  # radius of a bead
+		 k_in=k_in,
+		 k_out=k_out,
 		 # the force coefficient for the spring holding consecutive beads together
 		 # (large number = stiff spring)
 		 relative_rest_distance=3.0,
 		 # the resting distance between bead centers, relative to the radius of single bead
-		 nres_per_bead=20)  # number of residues per bead in the string-of-beads
-	seq = "MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPI" \
-		  "APEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAF" \
-		  "GSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA"
+		 nres_per_bead=nres_per_bead,
+		 kbs=kbs,
+
+		 sphere_radius=sphere_radius)  # number of residues per bead in the string-of-beads
+
 	label = "popZ"
-	nchains = 2
+	# nchains = 2
 	chains = []
 	for i in range(nchains):
 		chain = protein_chain_factory.create(seq, f"{label}_{i}")
@@ -90,6 +92,12 @@ def create_model(rmf_filename):
 	(a.k.a. energy function) made of our restraints."""
 
 	restraints = [chain.restraint for chain in chains] + [evr]
+	for chain0 in chains:
+		for chain1 in chains:
+			if chain0 != chain1:
+				restraints.append(protein_chain_factory.get_interchain_restraint(chain0, chain1))
+	restraints.append(protein_chain_factory.get_bounding_sphere_restraint(get_all_beads(chains)))
+
 	rsf = IMP.core.RestraintsScoringFunction(restraints,
 											 "Scoring function")  # Energy function
 
@@ -99,7 +107,8 @@ def create_model(rmf_filename):
 	 object, which enables us to simulate our interacting parts:
 	"""
 	bd = start_bd_simulation(rsf, m)
-	create_trajectory_file(rmf_filename, bd, h_root, restraints, m, chains)
+	T_ns, E, D, chains_on_iteration = create_trajectory_file(rmf_filename, bd, h_root, restraints, m, chains, sphere_radius)
+	return T_ns, E, D, chains_on_iteration
 
 def start_bd_simulation(rsf, model):
 	# BD
@@ -110,7 +119,7 @@ def start_bd_simulation(rsf, model):
 	bd.set_temperature(T)
 	return bd
 
-def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains):
+def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains, sphere_radius):
 	"""#### Making a movie (trajectory) file
 	We conclude by telling our simulation to output a trajectory (movie)
 	file every 10000 frames. The movie is saved using the [Rich Molecular File format]
@@ -127,6 +136,9 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains):
 						  h_root)  # Telling the movie that it should save all descendents of h_root
 	IMP.rmf.add_restraints(rmf,
 						   restraints)  # the restraints are also saved and can be viewed in Chimera
+
+	IMP.rmf.add_geometry(rmf, IMP.display.SphereGeometry(IMP.algebra.Sphere3D(IMP.algebra.Vector3D(0, 0, 0), sphere_radius)))
+
 	sos = IMP.rmf.SaveOptimizerState(model,
 									 rmf)  # an optimizer state is invoked every n frames of simulation by the BD simulation
 	sos.set_simulator(bd)
@@ -146,8 +158,10 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains):
 	T_ns = []  # time in nanoseconds
 	E = []  # energy
 	D = [[] for chain in chains]
+	chains_on_iteration = []
 	n_outer = 50000  # outer loop number of iterations
 	n_inner = 250  # optimization per iteration
+
 	for i in range(n_outer):
 		time_fs = bd.get_current_time()
 		time_ns = time_fs * 1e-6  # a nanosecond is a million femtoseconds
@@ -160,12 +174,15 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains):
 			distance = IMP.core.get_distance(IMP.core.XYZ(chain.beads[0]),
 											 IMP.core.XYZ(chain.beads[-1]))
 			D[i].append(distance)
+		chains_on_iteration.append(chains)
+
 	print(f"FINISHED. Simulated for {time_ns:.1f} nanoseconds in total.")
+
 	rmf.flush()  # make sure RMF file is properly saved
 	T_ns = np.array(T_ns)  # this will be convenient later
 	E = np.array(E)  # likewise
 	D = np.array(D)
-	return T_ns, E, D
+	return T_ns, E, D, chains_on_iteration
 
 
 def get_all_beads(chains):
@@ -173,5 +190,21 @@ def get_all_beads(chains):
 	return list(beads_set)
 
 
-rmf_filename = "my_trajectory.rmf"
-create_model(rmf_filename)
+bead_radius = 10.0
+sphere_radius = 100 * bead_radius
+IS_DEBUG_K = False
+kbs = 0.1
+k_in = 5.0
+k_out = 0.5
+if IS_DEBUG_K:
+	kbs = -kbs
+nchains = 3
+nres_per_bead = 20
+
+rmf_filename = f"my_trajectory_br{bead_radius}_sr{sphere_radius}_kbs{kbs}_kin{k_in}_kout{k_out}_nchains{nchains}_nres_per_bead{nres_per_bead}.rmf"
+seq = "MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPI" \
+	  "APEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAF" \
+	  "GSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA"
+# seq = "MSDQSQEPTMEEILASIRRI"
+
+create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs, nres_per_bead, k_in=k_in, k_out=k_out)
