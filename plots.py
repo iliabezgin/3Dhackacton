@@ -4,9 +4,10 @@ from dynamics import *
 import matplotlib.pyplot as plt
 import seaborn as sn
 import pandas as pd
+import pymc3 as pm
 
 
-def generate_heatmap(data, file_title):
+def generate_heatmap(data, labels_dict, file_title, plot_title):
     """
     method to generate heatmap with name file title of the given data
     """
@@ -14,9 +15,26 @@ def generate_heatmap(data, file_title):
                     linewidths=0.3,
                     )
     figure = ax.get_figure()
-    ax.legend()
+
+    if labels_dict:
+        ax.set_xlabel(labels_dict["x"])
+        ax.set_ylabel(labels_dict["y"])
+    if plot_title:
+        ax.set_title(plot_title)
 
     figure.savefig(file_title + ".png")
+
+
+def generate_history_plot(data, labels_dict, file_title, plot_title):
+    ax = sns.histplot(data)
+
+    if labels_dict:
+        ax.set_xlabel(labels_dict["x"])
+    if plot_title:
+        ax.set_title(plot_title)
+
+    plt.legend()
+    plt.savefig(file_title + "png")
 
 
 def generate_2D_scatter_plot(x, y, labels_dict, file_title, plot_title):
@@ -34,7 +52,6 @@ def generate_2D_scatter_plot(x, y, labels_dict, file_title, plot_title):
         plt.title(plot_title)
 
     plt.legend()
-
     plt.savefig(file_title + "png")
 
 
@@ -74,9 +91,9 @@ def generate_2D_plot(x, y, labels_dict, file_title, plot_title):
     plt.savefig(file_title + "png")
 
 
-def e_n_d_as_function_of_time(E, D, T_ns, T_ns_threshold):
+def simulation_energy_over_time(E, T_ns, T_ns_threshold):
     """
-    method to create function of energy and distances as a function of time
+    method to create function of energy as a function of time
     """
     no_start = (T_ns > T_ns_threshold)
     # (x, y, labels_dict, file_title, plot_title)
@@ -85,8 +102,36 @@ def e_n_d_as_function_of_time(E, D, T_ns, T_ns_threshold):
                       'y': r'E [$kcal/mol/A^2$]'},
                      "energy_graph",
                      "Energy(time) graph")
-    generate_2D_plot(T_ns[no_start], D[no_start],
+
+
+def end_to_end_distances_over_time(E, T_ns, T_ns_threshold):
+    """
+    method to create plot of distances of end to end as
+    a function of time
+    """
+    no_start = (T_ns > T_ns_threshold)
+    # (x, y, labels_dict, file_title, plot_title)
+    generate_2D_plot(T_ns[no_start], E[no_start],
                      {'x': r'time [$ns$]',
                       'y': r'end-to-end distance [$A$]'},
-                     "energy_graph",
-                     "Energy(time) graph")
+                     "distances_graph",
+                     "end to end Distances(time) graph")
+
+
+def distribution_of_energy_over_time(E, T_ns, T_ns_threshold):
+    """
+    method to create plot of distribution of energy over time
+    """
+    no_start = (T_ns > T_ns_threshold)
+    generate_history_plot(E[no_start],
+                          {"x": r'energy [$kcal^{-1}mol^{-1}A^2$]'},
+                          "dist_of_E",
+                          "distribution of Energy history plot")
+
+
+def distribution_of_dist_over_time(D, T_ns, T_ns_threshold):
+    D_concat = np.concatenate(D[0:])
+    generate_history_plot(D_concat,
+                          {"x": r'N''-C'' distance [A]'},
+                          "dist_of_D",
+                          "distribution of Distances history plot")
