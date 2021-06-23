@@ -1,5 +1,6 @@
 from tkinter import *
 import tkinter as tk
+import main_model
 
 
 class Gui_3D_Bio:
@@ -16,7 +17,7 @@ class Gui_3D_Bio:
         self.__middleBottomFrame = Frame(root, width=770, height=650,
                                          bg='gray94')
 
-        self.__firstArgument = tk.StringVar()
+        self.__givenSequence = tk.StringVar()
         self.__firstCheckBoxStatus = tk.IntVar()
         self.__secondCheckBoxStatus = tk.IntVar()
         self.__thirdCheckBoxStatus = tk.IntVar()
@@ -34,6 +35,27 @@ class Gui_3D_Bio:
         self.__informativeLabels = []
         self.__allCheckBoxes = []
         self.__allScales = []
+
+    def get_k_in(self):
+        return self.__kInSize
+
+    def get_k_out(self):
+        return self.__kOutSize
+
+    def get_sequence(self):
+        return self.__givenSequence
+
+    def get_location(self):
+        return self.__locationToSave
+
+    def get_bead_radius(self):
+        return self.__beadRadiusSize
+
+    def get_sphere_radius(self):
+        return self.__sphereRadiusSize
+
+    def get_kbs(self):
+        return self.__kbsValue
 
     def add_space_left_button_menu(self, n):
         """
@@ -91,7 +113,7 @@ class Gui_3D_Bio:
                            fg='black', font=("Ariel", 9, 'bold'))
         self.__allLabels.append(entryLabel)
         entryPlace = Entry(entryLabelFrame,
-                           textvariable=self.__firstArgument, bd=2)
+                           textvariable=self.__givenSequence, bd=2)
         self.__allEntry.append(entryPlace)
         submitButton = Button(entryLabelFrame, text='Submit',
                               height=1,
@@ -113,7 +135,6 @@ class Gui_3D_Bio:
     def submit_input(self):
         for label in self.__informativeLabels:
             label.pack_forget()
-        firstArgument = self.__firstArgument.get()
         isFirstPlot = self.__firstCheckBoxStatus.get()
         isSecondPlot = self.__secondCheckBoxStatus.get()
         isThirdPlot = self.__thirdCheckBoxStatus.get()
@@ -140,7 +161,7 @@ class Gui_3D_Bio:
             self.__informativeLabels.append(thirdPlotLabel)
 
         checkSizeLabel = Label(self.__middleBottomFrame,
-                               text=self.__kbsValue.get(),
+                               text=self.__locationToSave.get(),
                                fg='blue')
         checkSizeLabel.pack(side='top', fill='both')
         self.__informativeLabels.append(checkSizeLabel)
@@ -410,6 +431,7 @@ class Gui_3D_Bio:
             self.__allLabels.append(space)
 
 
+
 def main():
     root = Tk()
     program = Gui_3D_Bio(root)
@@ -423,4 +445,16 @@ def main():
     root.title("Hackathon Program")
     root.geometry('800x800')
     root.resizable(False, False)
+
+    seq = program.get_sequence()
+    path = program.get_location()
+    bead_radius = program.get_bead_radius()
+    sphere_radius = program.get_sphere_radius()
+    kbs = program.get_kbs()
+    k_in = program.get_k_in()
+    k_out = program.get_k_out()
+
+    main_model.create_model(seq, 10, path, bead_radius, sphere_radius,
+                            kbs, 5, k_in, k_out)
+
     root.mainloop()
