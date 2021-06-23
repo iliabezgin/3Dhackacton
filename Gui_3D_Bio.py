@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter as tk
 import main_model
+import plots
 
 
 class Gui_3D_Bio:
@@ -160,12 +161,15 @@ class Gui_3D_Bio:
             thirdPlotLabel.pack(side='top', fill='both')
             self.__informativeLabels.append(thirdPlotLabel)
 
-        main_model.create_model(self.__givenSequence.get(), 10,
-                                self.__locationToSave.get(),
-                                self.__beadRadiusSize.get(),
-                                self.__sphereRadiusSize.get(),
-                                self.__kbsValue.get(), 5, self.__kInSize.get(),
-                                0.1)
+        T_ns, E, D, chains_on_iteration = main_model.create_model(
+            self.__givenSequence.get(), 10,
+            self.__locationToSave.get(),
+            self.__beadRadiusSize.get(),
+            self.__sphereRadiusSize.get(),
+            self.__kbsValue.get(), 5, self.__kInSize.get(),
+            0.1)
+
+        plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 0.1)
 
     def dark_light_switch(self):
 
