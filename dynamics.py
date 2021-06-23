@@ -73,9 +73,13 @@ class ProteinChainFactory:
                  # bead radius in angstroms (10^-10 m)
                  relative_rest_distance: float = 2.0,
                  # distance between bead centers, relative to radius
-                 k_kcal_per_mol_per_A2: float = 1.0,
+                 k_in: float = 1.0,
                  # force coefficient for spring connecting consecutive beads in kcal/mol/A^2 (force is k*distance
-                 nres_per_bead: int = 5):
+                 nres_per_bead: int = 5,
+                 kbs: float = 0.1,
+                 sphere_radius: float = 100,
+                 k_out: float = 1.0
+                 ):
         """
         :param model
         :param default_radius_A       Bead radius in angstroms
@@ -87,8 +91,11 @@ class ProteinChainFactory:
         self._model = model
         self._default_radius_A = default_radius_A
         self._rest_distance_A = relative_rest_distance * default_radius_A
-        self._k_kcal_per_mol_per_A2 = k_kcal_per_mol_per_A2
+        self._k_in = k_in
+        self._k_out = k_out
         self._nres_per_bead = nres_per_bead
+        self._kbs = kbs
+        self._sphere_radius = sphere_radius
 
     @property
     def model(self): return self._model
@@ -100,7 +107,10 @@ class ProteinChainFactory:
     def rest_distance_A(self): return self._rest_distance_A
 
     @property
-    def k_kcal_per_mol_per_A2(self): return self._k_kcal_per_mol_per_A2
+    def k_in(self): return self._k_in
+
+    @property
+    def k_out(self): return self._k_out
 
     @property
     def nres_per_bead(self): return self._nres_per_bead
@@ -124,25 +134,32 @@ class ProteinChainFactory:
                           beads  # spring constant
                           ):
         hdps = IMP.core.HarmonicDistancePairScore(self.rest_distance_A,
-                                                  self.k_kcal_per_mol_per_A2)
+                                                  self.k_in)
         cpc = IMP.container.ConsecutivePairContainer(self.model,
                                                      beads)  # convention - use abbreviation for multiword class names
         pr = IMP.container.PairsRestraint(hdps, cpc)
         return pr, hdps
 
-    def get_interchain_restraint(chain0: ProteinChain,
+    def get_interchain_restraint(self, chain0: ProteinChain,
                                  chain1: ProteinChain):
-        center_A = 5
+        center_A = 5 #TODO to ask
         # k_kcal_per_mol_per_A2 = 0.5
         threshold_A = 10
         thb = IMP.core.TruncatedHarmonicBound(center_A,
-                                              ProteinChainFactory.k_kcal_per_mol_per_A2,
+                                              self.k_out,
                                               threshold_A)
         dps = IMP.core.DistancePairScore(thb)
         pr = IMP.core.PairRestraint(chain0.model,
                                     dps,
                                     [chain0.beads[2], chain1.beads[2]])
         return pr
+
+    def get_bounding_sphere_restraint(self, beads):
+        f = IMP.core.HarmonicUpperBound(0, self._kbs) # mean = 0, k = 0.1 (k_kcal_per_mol_per_A2)
+        s = IMP.algebra.Sphere3D(IMP.algebra.Vector3D(0, 0, 0), self._sphere_radius) #TODO 0.0.0, 100A
+        bsss = IMP.core.BoundingSphere3DSingletonScore(f, s)
+        r = IMP.container.SingletonsRestraint(bsss, beads)
+        return r
 
     def create(self,
                sequence: str,  # protein sequence
@@ -160,6 +177,7 @@ class ProteinChainFactory:
             beads.append(bead)
         # restrain beads on a "string":
         restraint, harmonic_distance_pair_score = self._create_restraint(beads)
+
         return ProteinChain(root_p=p,
                             beads=beads,
                             restraint=restraint,
