@@ -416,22 +416,33 @@ class Gui_3D_Bio:
         stepTwo.pack(side='top')
         self.__allLabels.append(stepTwo)
 
-        FillSequence = Label(self.__rightButtonsFrame,
-                             text='Fill Your Sequence', bg='orange',
-                             font=("Ariel", 7, 'normal'))
-        FillSequence.pack(side='top')
-        self.__allLabels.append(FillSequence)
+        placeToSave = Label(self.__rightButtonsFrame,
+                            text='Fill Your Save Location', bg='orange',
+                            font=("Ariel", 7, 'normal'))
+        placeToSave.pack(side='top')
+        self.__allLabels.append(placeToSave)
 
         stepThree = Label(self.__rightButtonsFrame,
                           text='Step Three:', bg='orange')
         stepThree.pack(side='top')
         self.__allLabels.append(stepThree)
 
-        placeToSave = Label(self.__rightButtonsFrame,
-                            text='Fill Your Save Location', bg='orange',
-                            font=("Ariel", 7, 'normal'))
-        placeToSave.pack(side='top')
-        self.__allLabels.append(placeToSave)
+        FillSequence = Label(self.__rightButtonsFrame,
+                             text='Fill Your Sequence', bg='orange',
+                             font=("Ariel", 7, 'normal'))
+        FillSequence.pack(side='top')
+        self.__allLabels.append(FillSequence)
+
+        stepFour = Label(self.__rightButtonsFrame,
+                         text='Step Four:', bg='orange')
+        stepFour.pack(side='top')
+        self.__allLabels.append(stepFour)
+
+        startSimulator = Label(self.__rightButtonsFrame,
+                               text='Press "Start Simulator"', bg='orange',
+                               font=("Ariel", 7, 'normal'))
+        startSimulator.pack(side='top')
+        self.__allLabels.append(startSimulator)
 
         for index in range(1):
             space = Label(self.__rightButtonsFrame, text="", bg='orange')
