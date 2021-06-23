@@ -8,7 +8,6 @@ import RMF
 import IMP.container
 import IMP.display
 import IMP.npctransport
-import pymc3 as pm
 import numpy as np
 import arviz as az
 import seaborn as sns

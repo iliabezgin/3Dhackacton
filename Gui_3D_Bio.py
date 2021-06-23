@@ -37,25 +37,25 @@ class Gui_3D_Bio:
         self.__allScales = []
 
     def get_k_in(self):
-        return self.__kInSize
+        return self.__kInSize.get()
 
     def get_k_out(self):
-        return self.__kOutSize
+        return self.__kOutSize.get()
 
     def get_sequence(self):
-        return self.__givenSequence
+        return self.__givenSequence.get()
 
     def get_location(self):
-        return self.__locationToSave
+        return self.__locationToSave.get()
 
     def get_bead_radius(self):
-        return self.__beadRadiusSize
+        return self.__beadRadiusSize.get()
 
     def get_sphere_radius(self):
-        return self.__sphereRadiusSize
+        return self.__sphereRadiusSize.get()
 
     def get_kbs(self):
-        return self.__kbsValue
+        return self.__kbsValue.get()
 
     def add_space_left_button_menu(self, n):
         """
@@ -160,13 +160,12 @@ class Gui_3D_Bio:
             thirdPlotLabel.pack(side='top', fill='both')
             self.__informativeLabels.append(thirdPlotLabel)
 
-        main_model.create_model(self.__givenSequence, 10,
-                                self.__locationToSave, self.__beadRadiusSize,
-                                self.__sphereRadiusSize,
-                                self.__kbsValue, 5, self.__kInSize,
-                                self.__kOutSize)
-
-
+        main_model.create_model(self.__givenSequence.get(), 10,
+                                self.__locationToSave.get(),
+                                self.__beadRadiusSize.get(),
+                                self.__sphereRadiusSize.get(),
+                                self.__kbsValue.get(), 5, self.__kInSize.get(),
+                                0.1)
 
     def dark_light_switch(self):
 
@@ -431,7 +430,6 @@ class Gui_3D_Bio:
             space = Label(self.__leftButtonsFrame, text="", bg='gray92')
             space.pack(side='top')
             self.__allLabels.append(space)
-
 
 
 def main():
