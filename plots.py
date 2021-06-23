@@ -129,7 +129,7 @@ def distribution_of_energy_over_time(E, T_ns, T_ns_threshold):
                           "distribution of Energy history plot")
 
 
-def distribution_of_dist_over_time(D, T_ns, T_ns_threshold):
+def distribution_of_dist_over_time(D):
     D_concat = np.concatenate(D[0:])
     generate_history_plot(D_concat,
                           {"x": r'N''-C'' distance [A]'},
