@@ -3,7 +3,7 @@ from dynamics import *
 bd_step_size_fs = 1000.0  # simulation time step in femotoseconds (10^-15 sec)
 
 
-def create_model(rmf_filename):
+def create_model(seq, chains, rmf_filename, bead_radius, sphere_radius, kbs, k_in, k_out):
 	"""## Building a dynamic model - parts, interactions, dynamics
 	OK, let's begin by building our first dynamic model!
 	As we learned in class, a dynamic model stands on three pillars:
@@ -28,13 +28,17 @@ def create_model(rmf_filename):
 
 	protein_chain_factory = ProteinChainFactory \
 		(model=m,  # the model in which the beads reside
-		 default_radius_A=10.0,  # radius of a bead
-		 k_kcal_per_mol_per_A2=5.0,
+		 default_radius_A=bead_radius,  # radius of a bead
+		 k_in=k_in,
+		 k_out=k_out,
 		 # the force coefficient for the spring holding consecutive beads together
 		 # (large number = stiff spring)
 		 relative_rest_distance=3.0,
 		 # the resting distance between bead centers, relative to the radius of single bead
-		 nres_per_bead=20)  # number of residues per bead in the string-of-beads
+		 nres_per_bead=20,
+		 kbs=kbs,
+
+		 sphere_radius=sphere_radius)  # number of residues per bead in the string-of-beads
 	seq = "MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPI" \
 		  "APEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAF" \
 		  "GSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA"
@@ -90,6 +94,12 @@ def create_model(rmf_filename):
 	(a.k.a. energy function) made of our restraints."""
 
 	restraints = [chain.restraint for chain in chains] + [evr]
+	for chain0 in chains:
+		for chain1 in chains:
+			if chain0 != chain1:
+				restraints.append(protein_chain_factory.get_interchain_restraint(chain0, chain1))
+	restraints.append(protein_chain_factory.get_bounding_sphere_restraint(get_all_beads(chains)))
+
 	rsf = IMP.core.RestraintsScoringFunction(restraints,
 											 "Scoring function")  # Energy function
 
@@ -173,5 +183,12 @@ def get_all_beads(chains):
 	return list(beads_set)
 
 
-rmf_filename = "my_trajectory.rmf"
-create_model(rmf_filename)
+bead_radius = 10.0
+sphere_radius = 10 * bead_radius
+IS_DEBUG_K = False
+kbs = 0.1
+if IS_DEBUG_K:
+	kbs = -kbs
+rmf_filename = f"my_trajectory_br{bead_radius}_sr{sphere_radius}_kbs{kbs}.rmf"
+
+create_model(None, None, rmf_filename, bead_radius, sphere_radius, kbs, k_in=5.0, k_out=5.0)
