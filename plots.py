@@ -14,6 +14,8 @@ def generate_heatmap(data, file_title):
                     linewidths=0.3,
                     )
     figure = ax.get_figure()
+    ax.legend()
+
     figure.savefig(file_title + ".png")
 
 
@@ -30,6 +32,8 @@ def generate_2D_scatter_plot(x, y, labels_dict, file_title, plot_title):
         plt.ylabel(labels_dict["y"])
     if plot_title:
         plt.title(plot_title)
+
+    plt.legend()
 
     plt.savefig(file_title + "png")
 
@@ -50,6 +54,7 @@ def generate_3D_scatter_plot(x, y, z, labels_dict, file_title, plot_title):
     if plot_title:
         ax.set_title(plot_title)
 
+    plt.legend()
     plt.savefig(file_title + "png")
 
 
@@ -65,4 +70,23 @@ def generate_2D_plot(x, y, labels_dict, file_title, plot_title):
     if plot_title:
         plt.title(plot_title)
 
+    plt.legend()
     plt.savefig(file_title + "png")
+
+
+def e_n_d_as_function_of_time(E, D, T_ns, T_ns_threshold):
+    """
+    method to create function of energy and distances as a function of time
+    """
+    no_start = (T_ns > T_ns_threshold)
+    # (x, y, labels_dict, file_title, plot_title)
+    generate_2D_plot(T_ns[no_start], E[no_start],
+                     {'x': r'time [$ns$]',
+                      'y': r'E [$kcal/mol/A^2$]'},
+                     "energy_graph",
+                     "Energy(time) graph")
+    generate_2D_plot(T_ns[no_start], D[no_start],
+                     {'x': r'time [$ns$]',
+                      'y': r'end-to-end distance [$A$]'},
+                     "energy_graph",
+                     "Energy(time) graph")
