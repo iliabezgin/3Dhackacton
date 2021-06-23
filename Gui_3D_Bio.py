@@ -407,7 +407,7 @@ class Gui_3D_Bio:
 
         fillAllArg = Label(self.__rightButtonsFrame,
                            text='Fill All The Arguments 1-5', bg='orange',
-                           font=("Ariel", 7, 'normal'))
+                           font=("Ariel", 7))
         fillAllArg.pack(side='top')
         self.__allLabels.append(fillAllArg)
 
