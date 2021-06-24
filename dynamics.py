@@ -65,7 +65,6 @@ class ProteinChainFactory:
     """
     A class for generating chains of beads
     """
-
     def __init__(self,
                  model: IMP.Model,
                  default_radius_A: float = 10.0,
@@ -95,6 +94,8 @@ class ProteinChainFactory:
         self._nres_per_bead = nres_per_bead
         self._kbs = kbs
         self._sphere_radius = sphere_radius
+        self.s = IMP.algebra.Sphere3D(IMP.algebra.Vector3D(0, 0, 0), self._sphere_radius) #TODO 0.0.0, 100A
+        self.init_locations = []
 
     @property
     def model(self): return self._model
@@ -145,7 +146,6 @@ class ProteinChainFactory:
     def get_interchain_restraint(self, chain0: ProteinChain,
                                  chain1: ProteinChain):
         center_A = 5 #TODO to ask
-        # k_kcal_per_mol_per_A2 = 0.5
         threshold_A = 10
         thb = IMP.core.TruncatedHarmonicBound(center_A,
                                               self.k_out,
@@ -158,14 +158,14 @@ class ProteinChainFactory:
 
     def get_bounding_sphere_restraint(self, beads):
         f = IMP.core.HarmonicUpperBound(0, self._kbs) # mean = 0, k = 0.1 (k_kcal_per_mol_per_A2)
-        s = IMP.algebra.Sphere3D(IMP.algebra.Vector3D(0, 0, 0), self._sphere_radius) #TODO 0.0.0, 100A
-        bsss = IMP.core.BoundingSphere3DSingletonScore(f, s)
+        bsss = IMP.core.BoundingSphere3DSingletonScore(f, self.s)
         r = IMP.container.SingletonsRestraint(bsss, beads)
         return r
 
     def create(self,
                sequence: str,  # protein sequence
-               name: str):  # a name of your choice for the protein chain
+               name: str,
+               in_center: bool):  # a name of your choice for the protein chain
         p = IMP.Particle(self.model, name)
         p_as_h = IMP.atom.Hierarchy.setup_particle(
             p)  # allow inclusion in IMP hierarchies
@@ -173,11 +173,11 @@ class ProteinChainFactory:
         n = len(sequence)
         nbeads = max(1, round(n / self.nres_per_bead))
         beads = []
-        init_locations = []
+        init_location = None
+        if not in_center:
+            init_location = self.get_free_location_in_sphere(self.init_locations)
         for i in range(nbeads):
-            #TODO create location
-
-            bead = self._create_bead(f"{name}_{i}")
+            bead = self._create_bead(f"{name}_{i}", init_coord=init_location)
             p_as_h.add_child(bead)
             beads.append(bead)
         # restrain beads on a "string":
@@ -187,6 +187,21 @@ class ProteinChainFactory:
                             beads=beads,
                             restraint=restraint,
                             sequence=sequence)
+
+    def get_free_location_in_sphere(self, ready_locations: [IMP.algebra.Vector3D]):
+        new_location = IMP.algebra.get_random_vector_in(IMP.algebra.Sphere3D(IMP.algebra.Vector3D(0, 0, 0), self._sphere_radius/2))
+        while not self.check_locations_collision(new_location, ready_locations, self.default_radius_A * 2):
+            new_location = IMP.algebra.get_random_vector_in(self.s)
+        return new_location
+
+    def check_locations_collision(self,
+                                  location_to_check: IMP.algebra.Vector3D,
+                                  ready_locations: [IMP.algebra.Vector3D],
+                                  threshold: float):
+        for ready_location in ready_locations:
+            if IMP.algebra.get_distance(location_to_check, ready_location) < threshold:
+                return False
+        return True
 
 #
 # """## Building a dynamic model - parts, interactions, dynamics
