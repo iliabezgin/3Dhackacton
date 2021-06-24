@@ -7,10 +7,23 @@ from PIL import ImageTk, Image
 
 
 def quit_program():
+    """
+    The function will quit the program
+    Returns: None
+
+    """
     quit()
 
 
 def pop_up_plot_window(path):
+    """
+    The function will pop up a new window and will show the plot of the correct graph image
+    Args:
+        path: image name as string
+
+    Returns: None
+
+    """
     window = tk.Toplevel()
     window.wm_title("Plot")
     window.configure(background='grey')
@@ -22,6 +35,9 @@ def pop_up_plot_window(path):
 
 
 class Gui_3D_Bio:
+    """
+    Main gui class for the program 
+    """
     def __init__(self, root):
         self._root = root
         self._titleFrame = Frame(root, width=800, height=50,
@@ -61,12 +77,38 @@ class Gui_3D_Bio:
         self._allCheckBoxes = []
 
     def normalLabelCreateAndPack(self, frame, side, text, font, bg, fg):
+        """
+        The method will create new label, pack it and add it to the normal labels array
+        Args:
+            frame: given frame to pack in as Frame
+            side: given side to pack in as SIDE
+            text: the label's string as string
+            font: the label's font as FONT
+            bg: the background color as COLOR
+            fg: the foreground color as COLOR
+
+        Returns: new label
+
+        """
         title = Label(frame, text=text, font=font, bg=bg, fg=fg)
         title.pack(side=side)
         self._allLabels.append(title)
         return title
 
     def informativeLabelCreateAndPack(self, frame, text, fg, bg, font, side):
+        """
+        The method will create new label, pack it and add it to the informative labels array
+        Args:
+            frame: given frame to pack in as Frame
+            text: the label's string as string
+            fg: the foreground color as COLOR
+            bg: the background color as COLOR
+            font: the label's font as FONT
+            side: given side to pack in as SIDE
+
+        Returns: new label
+
+        """
         invalidInputLabel = Label(frame, text=text, fg=fg, bg=bg, font=font)
         invalidInputLabel.pack(side=side)
         self._informativeLabels.append(invalidInputLabel)
@@ -74,12 +116,40 @@ class Gui_3D_Bio:
         return invalidInputLabel
 
     def buttonCreateAndPack(self, frame, text, height, width, font, bg, command, side):
+        """
+        The method will create new button, pack it and add it to the buttons array
+        Args:
+            frame: given frame to pack in as Frame
+            text: the button's string as string
+            height: the height of the button as Int
+            width: the width of the button as Int
+            font: the button's font as FONT
+            bg: the background color as COLOR
+            command: the command used upon clicking the button as Function
+            side: given side to pack in as SIDE
+
+        Returns: new button
+
+        """
         button = Button(frame, text=text, height=height, width=width, font=font, bg=bg, command=command)
         button.pack(side=side)
         self._allButton.append(button)
         return button
 
     def labelFrameCreation(self, frame, text, fg, bg, font, side):
+        """
+        The method will create new labelFrame, pack it and add it to the labelFrames array
+        Args:
+            frame: given frame to pack in as Frame
+            text: the labelFrame's string as string
+            fg: the foreground color as COLOR
+            bg: the background color as COLOR
+            font: the labelFrame's font as FONT
+            side: given side to pack in as SIDE
+
+        Returns: new labelFrame
+
+        """
         labelFrame = LabelFrame(frame, text=text, fg=fg, bg=bg, font=font)
         self._allLabelFrames.append(labelFrame)
         labelFrame.pack(side=side)
@@ -87,6 +157,17 @@ class Gui_3D_Bio:
         return labelFrame
 
     def entryCreateAndPack(self, frame, textVariable, bd, side):
+        """
+        The method will create new entry, pack it and add it to the entries array
+        Args:
+            frame: given frame to pack in as Frame
+            textVariable: a variable to put the entry value in
+            bd: the background color as COLOR
+            side: given side to pack in as SIDE
+
+        Returns: new entry
+
+        """
         entryPlace = Entry(frame, textvariable=textVariable, bd=bd)
         self._allEntry.append(entryPlace)
         entryPlace.pack(side=side)
@@ -94,6 +175,20 @@ class Gui_3D_Bio:
         return entryPlace
 
     def checkBoxCreateAndPack(self, frame, text, variable, bg, fg, font, side):
+        """
+        The method will create new checkBox, pack it and add it to the checkBoxes array
+        Args:
+            frame: given frame to pack in as Frame
+            text: the checkBox's string as string
+            variable: a variable to put the entry value in
+            bg: the background color as COLOR
+            fg: the foreground color as COLOR
+            font: the checkBox's font as FONT
+            side: given side to pack in as SIDE
+
+        Returns: new checkBox
+
+        """
         checkBox = Checkbutton(frame, text=text, variable=variable, bg=bg, fg=fg, font=font)
         checkBox.pack(side=side)
         self._allCheckBoxes.append(checkBox)
@@ -101,16 +196,37 @@ class Gui_3D_Bio:
         return checkBox
 
     def spaceCreation(self, frame, amount, side, bg):
+        """
+        The method will create new empty label, pack it and add it to the informative labels array
+        Args:
+            frame: given frame to pack in as Frame
+            amount: amount of spaces to have
+            side: given side to pack in as SIDE
+            bg: the background color as COLOR
+
+        Returns: None
+
+        """
         for index in range(amount):
             space = Label(frame, text="", bg=bg)
             space.pack(side=side)
             self._allLabels.append(space)
 
     def titleCreation(self):
+        """
+        The method will create a title for the program
+        Returns: None
+
+        """
         self.normalLabelCreateAndPack(self._titleFrame, 'top', 'Membraneless Organelles Final Project',
                                       ("Linux Libertine Mono O", 15, 'bold'), 'light blue', 'black')
 
     def mainFramesInit(self):
+        """
+        The method will init the main program's frame
+        Returns: None
+
+        """
         self._titleFrame.pack(side='top', fill='both')
         self._leftButtonsFrame.pack(side='left', fill='both')
         self._rightButtonsFrame.pack(side="right", fill='both')
@@ -119,7 +235,12 @@ class Gui_3D_Bio:
 
         self.titleCreation()
 
-    def changeModeButton(self):
+    def changeModeAndExitButton(self):
+        """
+        The method will changeMode and Exit buttons (included pack + add to array)
+        Returns: None
+
+        """
         self.spaceCreation(self._leftButtonsFrame, 2, 'top', 'light blue')
 
         self.buttonCreateAndPack(self._leftButtonsFrame, 'Dark/Light Mode', 1, 15, ("Ariel", 10, 'bold'), 'white',
@@ -131,6 +252,11 @@ class Gui_3D_Bio:
                                  lambda: quit(), 'top')
 
     def gridEntry(self):
+        """
+        The method will pack all the relevant entry places (included pack + add to array)
+        Returns: None
+
+        """
         entryLabelFrame = self.labelFrameCreation(self._middleTopFrame, 'Program Input', 'black', 'light blue',
                                                   ("Ariel", 10, 'normal'), 'left')
 
@@ -145,6 +271,11 @@ class Gui_3D_Bio:
                                  'white', lambda: self.submitInput(), 'top')
 
     def checkValidity(self):
+        """
+        The method will check that the given arguments are not negative
+        Returns: None
+
+        """
         if self._kInSize.get() < 0:
             return False
         if self._kOutSize.get() < 0:
@@ -162,8 +293,12 @@ class Gui_3D_Bio:
         return True
 
     def submitInput(self):
+        """
+        The method will start new simulation with the given arguments
+        Returns: None
+
+        """
         random_init_flag = False
-        random_diff_type = False
 
         for label in self._informativeLabels:
             label.pack_forget()
@@ -180,16 +315,13 @@ class Gui_3D_Bio:
         if self._randomInitCheckBoxStatus.get() == 1:
             random_init_flag = True
 
-        if self._diffChainsCheckBoxStatus.get() == 1:
-            random_diff_type = True
-
         T_ns, E, D, chains_on_iteration = main_model.create_model(self._givenSequence.get(), self._chainsNumber.get(),
                                                                   self._locationToSave.get(),
                                                                   self._beadRadiusSize.get(),
                                                                   self._sphereRadiusSize.get(),
                                                                   self._kbsValue.get(), self._aminoAmount.get(),
                                                                   self._kInSize.get(), self._kOutSize.get(),
-                                                                  random_init_flag, random_diff_type)
+                                                                  random_init_flag)
 
         if self._firstCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Energy Over Time Plot...',
@@ -225,8 +357,13 @@ class Gui_3D_Bio:
 
         self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Simulating is Over, Check Out Your Plots', 'blue',
                                            'grey93', ("Ariel", 10, 'normal'), 'top')
-
+    
     def configureFramesToDark(self):
+        """
+        The method will configure the frame into Dark Mode
+        Returns: None
+
+        """
         self._titleFrame.configure(background='gray20')
         self._leftButtonsFrame.configure(background='gray20')
         self._rightButtonsFrame.configure(background='gray20')
@@ -234,7 +371,11 @@ class Gui_3D_Bio:
         self._lowBorder.configure(background='gray20')
 
     def configureWidgetsToDark(self):
+        """
+        The method will configure the widgets into Dark Mode
+        Returns:
 
+        """
         for label in self._allLabels:
             label.config(bg='gray20')
             label.config(fg='white')
@@ -251,6 +392,11 @@ class Gui_3D_Bio:
             checkBox.config(bg='gray20')
 
     def configureFramesToLight(self):
+        """
+        The method will configure the frames into Light Mode
+        Returns: None
+
+        """
         self._titleFrame.configure(background='light blue')
         self._leftButtonsFrame.configure(background='light blue')
         self._rightButtonsFrame.configure(background='light blue')
@@ -258,7 +404,11 @@ class Gui_3D_Bio:
         self._lowBorder.configure(background='light blue')
 
     def configureWidgetsToLight(self):
+        """
+        The method will configure the widgets into Light Mode
+        Returns: None
 
+        """
         for label in self._allLabels:
             label.config(bg='light blue')
             label.config(fg='black')
@@ -275,6 +425,11 @@ class Gui_3D_Bio:
             checkBox.config(bg='light blue')
 
     def darkLightSwitch(self):
+        """
+        The method will execute the switch between DarkMode and LightMode
+        Returns: None
+
+        """
 
         if self._lightMode:
             self.configureFramesToDark()
@@ -286,8 +441,12 @@ class Gui_3D_Bio:
             self.configureWidgetsToLight()
             self._lightMode = True
 
-    def gridPlotCheckboxes(self):
+    def gridPlotCheckBoxes(self):
+        """
+        The method will pack all the relevant checkBoxes places (included pack + add to array)
+        Returns: None
 
+        """
         self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Select Your Plots:', ("Ariel", 9, 'normal'),
                                       bg='light blue', fg='black')
 
@@ -309,6 +468,11 @@ class Gui_3D_Bio:
                                    'red', ("Ariel", 7, 'normal'), 'top')
 
     def gridArguments(self):
+        """
+        The method will pack all the relevant arguments (included pack + add to array)
+        Returns: None
+
+        """
         kInLabelFrame = self.labelFrameCreation(self._middleTopFrame, 'Argument 1:', 'black', 'light blue',
                                                 ("Ariel", 10, 'normal'), 'left')
 
@@ -324,7 +488,11 @@ class Gui_3D_Bio:
         self.entryCreateAndPack(kOutLabelFrame, self._kOutSize, 2, 'left')
 
     def gridLeftSideWidgets(self):
+        """
+        The method will pack all the relevant widgets which on the left side (included pack + add to array)
+        Returns: None
 
+        """
         entryLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Output Save Location', 'black', 'light blue',
                                                   ("Ariel", 10, 'normal'), 'top')
 
@@ -386,7 +554,11 @@ class Gui_3D_Bio:
         self.spaceCreation(self._leftButtonsFrame, 1, 'top', 'light blue')
 
     def gridInstructions(self):
+        """
+        The method will pack all the basic instructions (included pack + add to array)
+        Returns: None
 
+        """
         self.spaceCreation(self._rightButtonsFrame, 2, 'top', 'light blue')
 
         randomInitLabelFrame = self.labelFrameCreation(self._rightButtonsFrame, 'Argument 8:', 'black', 'light blue',
@@ -448,16 +620,29 @@ class Gui_3D_Bio:
 
 
 def gui_buttons_and_design_init(program):
+    """
+    The method will setup all the buttons and the general design at the given program window
+    Args:
+        program: the program window as Tkinter Root
+
+    Returns: None
+
+    """
     program.mainFramesInit()
-    program.gridPlotCheckboxes()
+    program.gridPlotCheckBoxes()
     program.gridEntry()
     program.gridArguments()
     program.gridLeftSideWidgets()
     program.gridInstructions()
-    program.changeModeButton()
+    program.changeModeAndExitButton()
 
 
 def main():
+    """
+    The main method of the program
+    Returns: None
+
+    """
     root = Tk()
     program = Gui_3D_Bio(root)
     gui_buttons_and_design_init(program)
