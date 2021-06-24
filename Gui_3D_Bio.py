@@ -1,6 +1,7 @@
 from tkinter import *
 import tkinter as tk
-# import main_model
+#import main_model
+#import plots
 
 
 def quit_program():
@@ -27,6 +28,8 @@ class Gui_3D_Bio:
         self.__firstCheckBoxStatus = tk.IntVar()
         self.__secondCheckBoxStatus = tk.IntVar()
         self.__thirdCheckBoxStatus = tk.IntVar()
+        self.__fourthCheckBoxStatus = tk.IntVar()
+        self.__fifthCheckBoxStatus = tk.IntVar()
         self.__kInSize = tk.IntVar()
         self.__kOutSize = tk.IntVar()
         self.__beadRadiusSize = tk.IntVar()
@@ -137,37 +140,59 @@ class Gui_3D_Bio:
     def submit_input(self):
         for label in self.__informativeLabels:
             label.pack_forget()
-        isFirstPlot = self.__firstCheckBoxStatus.get()
-        isSecondPlot = self.__secondCheckBoxStatus.get()
-        isThirdPlot = self.__thirdCheckBoxStatus.get()
 
-        if isFirstPlot == 1:
+        # T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber,
+        #                                                           self.__locationToSave.get(),
+        #                                                           self.__beadRadiusSize.get(),
+        #                                                           self.__sphereRadiusSize.get(),
+        #                                                           self.__kbsValue.get(), self.__aminoAmount,
+        #                                                           self.__kInSize.get(), self.__kOutSize.get())
+
+        if self.__firstCheckBoxStatus.get() == 1:
             firstPlotLabel = Label(self.__middleBottomFrame,
-                                   text='You Chose To Show First Plot',
+                                   text='Generating Energy Over Time Plot...',
                                    fg='blue', bg='grey93')
             firstPlotLabel.pack(side='top')
             self.__informativeLabels.append(firstPlotLabel)
+            # plots.simulation_energy_over_time(E, T_ns, 1)
 
-        if isSecondPlot == 1:
+        if self.__secondCheckBoxStatus.get() == 1:
             secondPlotLabel = Label(self.__middleBottomFrame,
-                                    text='You Chose To Show Second Plot',
+                                    text='Generating End To End Over Time Plot...',
                                     fg='blue', bg='grey93')
             secondPlotLabel.pack(side='top')
             self.__informativeLabels.append(secondPlotLabel)
+            # plots.end_to_end_distances_over_time(E, T_ns, 1)
 
-        if isThirdPlot == 1:
+        if self.__thirdCheckBoxStatus.get() == 1:
             thirdPlotLabel = Label(self.__middleBottomFrame,
-                                   text='You Chose To Show Third Plot',
+                                   text='Generating Distribution Of Energy Over Time Plot...',
                                    fg='blue', bg='grey93')
             thirdPlotLabel.pack(side='top')
             self.__informativeLabels.append(thirdPlotLabel)
+            # plots.distribution_of_energy_over_time(E, T_ns, 1)
 
-        #T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber,
-        #                         self.__locationToSave.get(),
-        #                         self.__beadRadiusSize.get(),
-        #                         self.__sphereRadiusSize.get(),
-        #                        self.__kbsValue.get(), self.__aminoAmount,
-        #                         self.__kInSize.get(), self.__kOutSize.get())
+        if self.__fourthCheckBoxStatus.get() == 1:
+            fourthPlotLabel = Label(self.__middleBottomFrame,
+                                    text='Generating Distribution Of Distances Over Time Plot...',
+                                    fg='blue', bg='grey93')
+            fourthPlotLabel.pack(side='top')
+            self.__informativeLabels.append(fourthPlotLabel)
+            # plots.distribution_of_dist_over_time(D)
+
+        if self.__fifthCheckBoxStatus.get() == 1:
+            fifthPlotLabel = Label(self.__middleBottomFrame,
+                                   text='Generating Distribution Of Bead Locations...',
+                                   fg='blue', bg='grey93')
+            fifthPlotLabel.pack(side='top')
+            self.__informativeLabels.append(fifthPlotLabel)
+            # plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
+
+        endOfRunLabel = Label(self.__middleBottomFrame,
+                              text='Simulating is Over, Check Out Your Plots',
+                              fg='blue', bg='grey93')
+        endOfRunLabel.pack(side='top')
+        self.__informativeLabels.append(endOfRunLabel)
 
     def dark_light_switch(self):
 
@@ -218,29 +243,50 @@ class Gui_3D_Bio:
             self.__lightMode = True
 
     def grid_plot_checkboxes(self):
+
         plot_label = Label(self.__rightButtonsFrame, text='Select Your Plots:',
                            bg='orange')
         plot_label.pack(side='top')
         self.__allLabels.append(plot_label)
-        firstCheckBox = Checkbutton(self.__rightButtonsFrame, text='First Plot'
+
+        for index in range(1):
+            space = Label(self.__rightButtonsFrame, text="", bg='orange')
+            space.pack(side='top')
+            self.__allLabels.append(space)
+
+        firstCheckBox = Checkbutton(self.__rightButtonsFrame, text='Energy Over Time'
                                     , variable=self.__firstCheckBoxStatus,
-                                    bg='orange', fg='red')
+                                    bg='orange', fg='red', font=("Ariel", 7, 'normal'))
         firstCheckBox.pack(side='top')
         self.__allCheckBoxes.append(firstCheckBox)
 
         secondCheckBox = Checkbutton(self.__rightButtonsFrame,
-                                     text='Second Plot',
+                                     text='End to End Distances',
                                      variable=self.__secondCheckBoxStatus,
-                                     bg='orange', fg='red')
+                                     bg='orange', fg='red', font=("Ariel", 7, 'normal'))
         secondCheckBox.pack(side='top')
         self.__allCheckBoxes.append(secondCheckBox)
 
         thirdCheckBox = Checkbutton(self.__rightButtonsFrame,
-                                    text='Third Plot',
+                                    text='Energy Distribution',
                                     variable=self.__thirdCheckBoxStatus,
-                                    bg='orange', fg='red')
+                                    bg='orange', fg='red', font=("Ariel", 7, 'normal'))
         thirdCheckBox.pack(side='top')
         self.__allCheckBoxes.append(thirdCheckBox)
+
+        fourthCheckBox = Checkbutton(self.__rightButtonsFrame,
+                                     text='Location Distribution',
+                                     variable=self.__fourthCheckBoxStatus,
+                                     bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+        fourthCheckBox.pack(side='top')
+        self.__allCheckBoxes.append(fourthCheckBox)
+
+        fifthCheckBox = Checkbutton(self.__rightButtonsFrame,
+                                    text='Beads Location',
+                                    variable=self.__fifthCheckBoxStatus,
+                                    bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+        fifthCheckBox.pack(side='top')
+        self.__allCheckBoxes.append(fifthCheckBox)
 
     def grid_scales(self):
         k_in_LabelFrame = LabelFrame(self.__middleTopFrame,
@@ -400,9 +446,9 @@ class Gui_3D_Bio:
             self.__allLabels.append(space)
 
         amino_amount_LabelFrame = LabelFrame(self.__leftButtonsFrame,
-                                              text='Argument 7:',
-                                              fg='black', bg='orange',
-                                              font=("Ariel", 10, 'normal'))
+                                             text='Argument 7:',
+                                             fg='black', bg='orange',
+                                             font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(amino_amount_LabelFrame)
 
         amino_amount_LabelFrame.pack(side='top')
@@ -412,7 +458,7 @@ class Gui_3D_Bio:
                                    fg='black', font=("Ariel", 9, 'bold'))
 
         amino_amount_scale = Entry(amino_amount_LabelFrame,
-                                    textvariable=self.__aminoAmount, bd=2)
+                                   textvariable=self.__aminoAmount, bd=2)
         amino_amount_label.pack()
         amino_amount_scale.pack()
         self.__allLabels.append(amino_amount_label)
