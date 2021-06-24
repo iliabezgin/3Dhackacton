@@ -145,7 +145,7 @@ class Gui_3D_Bio:
 
         img = ImageTk.PhotoImage(Image.open(path))
         image_label = Label(window, image=img)
-
+        image_label.photo = img
         image_label.pack()
 
     def submit_input(self):
@@ -172,7 +172,7 @@ class Gui_3D_Bio:
             firstPlotLabel.pack(side='top')
             self.__informativeLabels.append(firstPlotLabel)
             plots.simulation_energy_over_time(E, T_ns, 1)
-            self.pop_up_plot(self.__locationToSave.get()+"energy_graph.png")
+            self.pop_up_plot("energy_graph.png")
 
         if self.__secondCheckBoxStatus.get() == 1:
             secondPlotLabel = Label(self.__middleBottomFrame,
@@ -181,7 +181,7 @@ class Gui_3D_Bio:
             secondPlotLabel.pack(side='top')
             self.__informativeLabels.append(secondPlotLabel)
             plots.end_to_end_distances_over_time(E, T_ns, 1)
-            self.pop_up_plot(self.__locationToSave.get()+"distances_graph.png")
+            self.pop_up_plot("distances_graph.png")
 
         if self.__thirdCheckBoxStatus.get() == 1:
             thirdPlotLabel = Label(self.__middleBottomFrame,
@@ -190,7 +190,7 @@ class Gui_3D_Bio:
             thirdPlotLabel.pack(side='top')
             self.__informativeLabels.append(thirdPlotLabel)
             plots.distribution_of_energy_over_time(E, T_ns, 1)
-            self.pop_up_plot(self.__locationToSave.get()+"dist_of_E.png")
+            self.pop_up_plot("dist_of_E.png")
 
         if self.__fourthCheckBoxStatus.get() == 1:
             fourthPlotLabel = Label(self.__middleBottomFrame,
@@ -199,7 +199,7 @@ class Gui_3D_Bio:
             fourthPlotLabel.pack(side='top')
             self.__informativeLabels.append(fourthPlotLabel)
             plots.distribution_of_dist_over_time(D)
-            self.pop_up_plot(self.__locationToSave.get()+"dist_of_D.png")
+            self.pop_up_plot("dist_of_D.png")
 
         if self.__fifthCheckBoxStatus.get() == 1:
             fifthPlotLabel = Label(self.__middleBottomFrame,
@@ -208,7 +208,7 @@ class Gui_3D_Bio:
             fifthPlotLabel.pack(side='top')
             self.__informativeLabels.append(fifthPlotLabel)
             plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
-            self.pop_up_plot(self.__locationToSave.get()+"variance_of_centers.png")
+            self.pop_up_plot("variance_of_centers.png")
 
         endOfRunLabel = Label(self.__middleBottomFrame,
                               text='Simulating is Over, Check Out Your Plots',
@@ -353,7 +353,7 @@ class Gui_3D_Bio:
                                      fg='black', bg='orange',
                                      font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(entryLabelFrame)
-        entryLabel = Label(entryLabelFrame, text='Enter Location For RMF:',
+        entryLabel = Label(entryLabelFrame, text='Enter Name For RMF:',
                            bg='orange',
                            fg='black', font=("Ariel", 9, 'bold'))
         self.__allLabels.append(entryLabel)
