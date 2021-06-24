@@ -202,10 +202,8 @@ def calculate_center_of_mass(chain):
     calculate center of mass of current chain position
     """
     D = IMP.algebra.Vector3D(0, 0, 0)
-    M = 0
+    M = len(chain.beads)
     for bead in chain.beads:
-        bead_mass = bead.get_mass()
-        coords = bead.get_coordinates()
-        D += coords
-        M += bead_mass
+        coords = IMP.core.XYZ(bead)
+        D += coords.get_coordinates()
     return calculate_distance_in_xyz(D / M)
