@@ -1,5 +1,7 @@
 from tkinter import *
 import tkinter as tk
+
+
 import main_model
 import plots
 from PIL import ImageTk, Image
@@ -31,6 +33,8 @@ class Gui_3D_Bio:
         self.__thirdCheckBoxStatus = tk.IntVar()
         self.__fourthCheckBoxStatus = tk.IntVar()
         self.__fifthCheckBoxStatus = tk.IntVar()
+        self.__randomInitCheckBoxStatus = tk.IntVar()
+        self.__diffChainsCheckBoxStatus = tk.IntVar()
         self.__kInSize = tk.IntVar()
         self.__kOutSize = tk.IntVar()
         self.__beadRadiusSize = tk.IntVar()
@@ -154,7 +158,7 @@ class Gui_3D_Bio:
 
         simulationRunLabel = Label(self.__middleBottomFrame,
                                    text='Running Simulation!',
-                                   fg='blue', bg='grey93')
+                                   fg='blue', bg='grey93', font=("Ariel", 10, 'normal'))
         simulationRunLabel.pack(side='top')
         self.__informativeLabels.append(simulationRunLabel)
 
@@ -168,7 +172,7 @@ class Gui_3D_Bio:
         if self.__firstCheckBoxStatus.get() == 1:
             firstPlotLabel = Label(self.__middleBottomFrame,
                                    text='Generating Energy Over Time Plot...',
-                                   fg='blue', bg='grey93')
+                                   fg='blue', bg='grey93', font=("Ariel", 9, 'normal'))
             firstPlotLabel.pack(side='top')
             self.__informativeLabels.append(firstPlotLabel)
             plots.simulation_energy_over_time(E, T_ns, 1)
@@ -177,7 +181,7 @@ class Gui_3D_Bio:
         if self.__secondCheckBoxStatus.get() == 1:
             secondPlotLabel = Label(self.__middleBottomFrame,
                                     text='Generating End To End Over Time Plot...',
-                                    fg='blue', bg='grey93')
+                                    fg='blue', bg='grey93', font=("Ariel", 9, 'normal'))
             secondPlotLabel.pack(side='top')
             self.__informativeLabels.append(secondPlotLabel)
             plots.end_to_end_distances_over_time(E, T_ns, 1)
@@ -186,7 +190,7 @@ class Gui_3D_Bio:
         if self.__thirdCheckBoxStatus.get() == 1:
             thirdPlotLabel = Label(self.__middleBottomFrame,
                                    text='Generating Distribution Of Energy Over Time Plot...',
-                                   fg='blue', bg='grey93')
+                                   fg='blue', bg='grey93', font=("Ariel", 9, 'normal'))
             thirdPlotLabel.pack(side='top')
             self.__informativeLabels.append(thirdPlotLabel)
             plots.distribution_of_energy_over_time(E, T_ns, 1)
@@ -195,7 +199,7 @@ class Gui_3D_Bio:
         if self.__fourthCheckBoxStatus.get() == 1:
             fourthPlotLabel = Label(self.__middleBottomFrame,
                                     text='Generating Distribution Of Distances Over Time Plot...',
-                                    fg='blue', bg='grey93')
+                                    fg='blue', bg='grey93', font=("Ariel", 9, 'normal'))
             fourthPlotLabel.pack(side='top')
             self.__informativeLabels.append(fourthPlotLabel)
             plots.distribution_of_dist_over_time(D)
@@ -204,7 +208,7 @@ class Gui_3D_Bio:
         if self.__fifthCheckBoxStatus.get() == 1:
             fifthPlotLabel = Label(self.__middleBottomFrame,
                                    text='Generating Distribution Of Bead Locations...',
-                                   fg='blue', bg='grey93')
+                                   fg='blue', bg='grey93', font=("Ariel", 9, 'normal'))
             fifthPlotLabel.pack(side='top')
             self.__informativeLabels.append(fifthPlotLabel)
             plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
@@ -212,9 +216,25 @@ class Gui_3D_Bio:
 
         endOfRunLabel = Label(self.__middleBottomFrame,
                               text='Simulating is Over, Check Out Your Plots',
-                              fg='blue', bg='grey93')
+                              fg='blue', bg='grey93', font=("Ariel", 10, 'normal'))
         endOfRunLabel.pack(side='top')
         self.__informativeLabels.append(endOfRunLabel)
+
+        if self.__randomInitCheckBoxStatus.get() == 1:
+            randomInitLabel = Label(self.__middleBottomFrame,
+                                   text='Random Init: On',
+                                   fg='blue', bg='grey93', font=("Ariel", 8, 'normal'))
+            randomInitLabel.pack(side='top')
+            self.__informativeLabels.append(randomInitLabel)
+            #random init function call <<
+
+        if self.__diffChainsCheckBoxStatus.get() == 1:
+            diffChainsLabel = Label(self.__middleBottomFrame,
+                                   text='Different Chains Type: On',
+                                   fg='blue', bg='grey93', font=("Ariel", 8, 'normal'))
+            diffChainsLabel.pack(side='top')
+            self.__informativeLabels.append(diffChainsLabel)
+            #random init function call <<
 
     def dark_light_switch(self):
 
@@ -493,7 +513,45 @@ class Gui_3D_Bio:
 
     def grid_instructions(self):
 
-        for index in range(6):
+        for index in range(2):
+            space = Label(self.__rightButtonsFrame, text="", bg='orange')
+            space.pack(side='top')
+            self.__allLabels.append(space)
+
+        random_init_LabelFrame = LabelFrame(self.__rightButtonsFrame,
+                                            text='Argument 8:',
+                                            fg='black', bg='orange',
+                                            font=("Ariel", 10, 'normal'))
+        self.__allLabelFrames.append(random_init_LabelFrame)
+
+        random_init_LabelFrame.pack(side='top')
+
+        random_init_checkbox = Checkbutton(random_init_LabelFrame, text='Random Init',
+                                           variable=self.__randomInitCheckBoxStatus,
+                                           bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+        random_init_checkbox.pack(side='top')
+        self.__allCheckBoxes.append(random_init_checkbox)
+
+        for index in range(1):
+            space = Label(self.__rightButtonsFrame, text="", bg='orange')
+            space.pack(side='top')
+            self.__allLabels.append(space)
+
+        diff_chains_type_LabelFrame = LabelFrame(self.__rightButtonsFrame,
+                                                 text='Argument 9:',
+                                                 fg='black', bg='orange',
+                                                 font=("Ariel", 10, 'normal'))
+        self.__allLabelFrames.append(diff_chains_type_LabelFrame)
+
+        diff_chains_type_LabelFrame.pack(side='top')
+
+        diff_chains_checkbox = Checkbutton(diff_chains_type_LabelFrame, text='Diff Chains Type',
+                                           variable=self.__diffChainsCheckBoxStatus,
+                                           bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+        diff_chains_checkbox.pack(side='top')
+        self.__allCheckBoxes.append(diff_chains_checkbox)
+
+        for index in range(2):
             space = Label(self.__rightButtonsFrame, text="", bg='orange')
             space.pack(side='top')
             self.__allLabels.append(space)
@@ -509,7 +567,7 @@ class Gui_3D_Bio:
         self.__allLabels.append(stepOne)
 
         fillAllArg = Label(self.__rightButtonsFrame,
-                           text='Fill All The Arguments 1-7', bg='orange',
+                           text='Fill All The Arguments 1-9', bg='orange',
                            font=("Ariel", 7, 'normal'))
         fillAllArg.pack(side='top')
         self.__allLabels.append(fillAllArg)
@@ -520,7 +578,7 @@ class Gui_3D_Bio:
         self.__allLabels.append(stepTwo)
 
         placeToSave = Label(self.__rightButtonsFrame,
-                            text='Fill Your Save Location', bg='orange',
+                            text='Fill Your File Name', bg='orange',
                             font=("Ariel", 7, 'normal'))
         placeToSave.pack(side='top')
         self.__allLabels.append(placeToSave)
