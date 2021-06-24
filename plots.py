@@ -7,6 +7,35 @@ import seaborn as sn
 import pandas as pd
 
 
+###################### pickling it up ######################
+
+def load_pickles_to_arrays():
+    """
+    method to load pickles to arrays
+    """
+    cwd = os.getcwd()
+    with open(cwd + '/T_ns_arr.pkl', 'rb') as f:
+        T_ns = pickle.load(f)
+    with open(cwd + '/Energy.pkl', 'rb') as f:
+        E = pickle.load(f)
+    with open(cwd + '/Distance-e-to-e', 'rb') as f:
+        D = pickle.load(f)
+    with open(cwd + '/chain_on_iterations.pkl', 'rb') as f:
+        chains_on_iterations = pickle.load(f)
+    return T_ns, E, D, chains_on_iterations
+
+
+###################### helpers ######################
+
+def calculate_center_of_mass(chainVecs: IMP.algebra.Vector3Ds):
+    """
+    calculate center of mass of current chain position
+    """
+    return IMP.algebra.get_centroid(chainVecs)
+
+
+###################### plot generators ######################
+
 def generate_heatmap(data, labels_dict, file_title, plot_title):
     """
     method to generate heatmap with name file title of the given data
@@ -114,6 +143,8 @@ def generate_2D_plot(x, y, labels_dict, file_title, plot_title):
     plt.savefig(file_title)
 
 
+###################### wanted plots ######################
+
 def simulation_energy_over_time(E, T_ns, T_ns_threshold):
     """
     method to create function of energy as a function of time
@@ -186,12 +217,3 @@ def distribution_of_beads_locations(iter_chains, T_ns, T_ns_threshold):
                       'y': r'variance of center of mass'},
                      "variance_of_centers",
                      "Var(time) graph")
-
-
-# functions for new plots
-
-def calculate_center_of_mass(chainVecs: IMP.algebra.Vector3Ds):
-    """
-    calculate center of mass of current chain position
-    """
-    return IMP.algebra.get_centroid(chainVecs)
