@@ -9,21 +9,36 @@ import matplotlib.pyplot as plt
 import seaborn as sn
 import pandas as pd
 
+k_out_list = np.logspace(-3, -0.5, 15, base=10)
+radius_list = np.logspace(2, 3, 8, base=10)
+
 
 ###################### pickling it up ######################
 
-def load_pickles_to_arrays():
+def generate_file_ending(k_out, sphere_radius):
+    """
+    generate file ending per given k or sphere
+    """
+    kout = f'{k_out:.3f}'
+    spr_rad = f'{sphere_radius:.3f}'
+
+    current_string = "kout=" + kout + "_" + "spr_rad=" + spr_rad
+    return current_string
+
+
+def load_pickles_to_arrays(k_out, sphere_radius):
     """
     method to load pickles to arrays
     """
     cwd = os.getcwd()
-    with open(cwd + '/T_ns.pkl', 'rb') as f:
+    current = generate_file_ending(k_out, sphere_radius)
+    with open(cwd + '/T_ns_' + current + ".pkl", 'rb') as f:
         T_ns = pickle.load(f)
-    with open(cwd + '/Energy.pkl', 'rb') as f:
+    with open(cwd + '/Energy_' + current + ".pkl", 'rb') as f:
         E = pickle.load(f)
-    with open(cwd + '/Distance-e-to-e', 'rb') as f:
+    with open(cwd + '/Distance-e-to-e_' + current + ".pkl", 'rb') as f:
         D = pickle.load(f)
-    with open(cwd + '/chain_on_iterations.pkl', 'rb') as f:
+    with open(cwd + '/chain_on_iterations_' + current + ".pkl", 'rb') as f:
         chains_on_iterations = pickle.load(f)
         chains_on_iterations = back_to_XYZs(chains_on_iterations)
     return T_ns, E, D, chains_on_iterations
@@ -51,8 +66,12 @@ def back_to_XYZs(chains_on_iterations):
     return n_chains_on_iterations
 
 
-def var_array_generator(centers):
-    for cen in centers:
+def var_array_generator(array):
+    """
+    generate variance over given array
+    """
+    vars = []
+    for cen in array:
         iteration_var = np.var(np.array(cen))
         vars.append(iteration_var)
 
@@ -91,6 +110,9 @@ def generate_heatmap(data, labels_dict, file_title, plot_title):
 
 
 def generate_history_plot(data, labels_dict, file_title, plot_title):
+    """
+    method to get history plot out of given data
+    """
     fig = plt.figure()
     ax = sns.histplot(data)
 
@@ -220,6 +242,9 @@ def distribution_of_energy_over_time(E, T_ns, T_ns_threshold):
 
 
 def distribution_of_dist_over_time(D):
+    """
+    method to get distribution of distances over time
+    """
     D_concat = np.concatenate(D[0:])
     generate_history_plot(D_concat,
                           {"x": r'N''-C'' distance [A]'},
@@ -235,7 +260,7 @@ def distribution_of_beads_locations(iter_chains, T_ns, T_ns_threshold):
     # each array contains all centers of frame, per the current iteration
     # centers = C[i][j] -> center of j'th chain in i'th iteration
     no_start = (T_ns > T_ns_threshold)
-    vars = []
+
     centers = [[calculate_center_of_mass(chain) for chain in
                 chains_on_cur_iteration] for
                chains_on_cur_iteration in iter_chains]
