@@ -1,6 +1,6 @@
 from tkinter import *
 import tkinter as tk
-import main_model
+# import main_model
 
 
 def quit_program():
@@ -19,7 +19,7 @@ class Gui_3D_Bio:
         self.__middleTopFrame = Frame(root, width=770, height=130,
                                       bg='orange')
         self.__middleBottomFrame = Frame(root, width=770, height=650,
-                                         bg='ghost white')
+                                         bg='grey93')
         self.__lowBorder = Frame(root, width=800, height=70, bg='orange')
         self.__lowBorder.pack(side='bottom')
 
@@ -33,6 +33,8 @@ class Gui_3D_Bio:
         self.__sphereRadiusSize = tk.IntVar()
         self.__kbsValue = tk.IntVar()
         self.__locationToSave = tk.StringVar()
+        self.__chainsNumber = tk.IntVar()
+        self.__aminoAmount = tk.IntVar()
         self.__lightMode = True
         self.__allButton = []
         self.__allEntry = []
@@ -40,7 +42,6 @@ class Gui_3D_Bio:
         self.__allLabelFrames = []
         self.__informativeLabels = []
         self.__allCheckBoxes = []
-        self.__allScales = []
 
     def get_k_in(self):
         return self.__kInSize
@@ -63,17 +64,6 @@ class Gui_3D_Bio:
     def get_kbs(self):
         return self.__kbsValue
 
-    def add_space_left_button_menu(self, n):
-        """
-        the method will create space labels
-        :param n: int
-        :return: None
-        """
-        for index in range(n):
-            space = Label(self.__leftButtonsFrame, text="", bg='blue')
-            space.pack(side='top')
-            self.__allLabels.append(space)
-
     def root_init(self):
         self.__titleFrame.pack(side='top', fill='both')
         title = Label(self.__titleFrame, text='Membraneless Organelles Final '
@@ -85,9 +75,14 @@ class Gui_3D_Bio:
         self.__leftButtonsFrame.pack(side='left', fill='both')
         self.__rightButtonsFrame.pack(side="right", fill='both')
         self.__middleTopFrame.pack(fill='both')
-        self.__middleBottomFrame.pack(side='top')
+        self.__middleBottomFrame.pack(side='top', fill='both')
 
     def change_mode_button(self):
+        for index in range(2):
+            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space.pack(side='top')
+            self.__allLabels.append(space)
+
         changeModeButton = Button(self.__leftButtonsFrame,
                                   text='Dark/Light Mode',
                                   height=1,
@@ -97,7 +92,7 @@ class Gui_3D_Bio:
         changeModeButton.pack(side='top')
         self.__allButton.append(changeModeButton)
 
-        for index in range(11):
+        for index in range(3):
             space = Label(self.__leftButtonsFrame, text="", bg='orange')
             space.pack(side='top')
             self.__allLabels.append(space)
@@ -149,30 +144,30 @@ class Gui_3D_Bio:
         if isFirstPlot == 1:
             firstPlotLabel = Label(self.__middleBottomFrame,
                                    text='You Chose To Show First Plot',
-                                   fg='blue')
-            firstPlotLabel.pack(side='top', fill='both')
+                                   fg='blue', bg='grey93')
+            firstPlotLabel.pack(side='top')
             self.__informativeLabels.append(firstPlotLabel)
 
         if isSecondPlot == 1:
             secondPlotLabel = Label(self.__middleBottomFrame,
                                     text='You Chose To Show Second Plot',
-                                    fg='blue')
-            secondPlotLabel.pack(side='top', fill='both')
+                                    fg='blue', bg='grey93')
+            secondPlotLabel.pack(side='top')
             self.__informativeLabels.append(secondPlotLabel)
 
         if isThirdPlot == 1:
             thirdPlotLabel = Label(self.__middleBottomFrame,
                                    text='You Chose To Show Third Plot',
-                                   fg='blue')
-            thirdPlotLabel.pack(side='top', fill='both')
+                                   fg='blue', bg='grey93')
+            thirdPlotLabel.pack(side='top')
             self.__informativeLabels.append(thirdPlotLabel)
 
-        main_model.create_model(self.__givenSequence.get(), 4,
-                                self.__locationToSave.get(),
-                                self.__beadRadiusSize.get(),
-                                self.__sphereRadiusSize.get(),
-                                self.__kbsValue.get(), 5,
-                                self.__kInSize.get(), self.__kOutSize.get())
+        #T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber,
+        #                         self.__locationToSave.get(),
+        #                         self.__beadRadiusSize.get(),
+        #                         self.__sphereRadiusSize.get(),
+        #                        self.__kbsValue.get(), self.__aminoAmount,
+        #                         self.__kInSize.get(), self.__kOutSize.get())
 
     def dark_light_switch(self):
 
@@ -185,10 +180,6 @@ class Gui_3D_Bio:
             for label in self.__allLabels:
                 label.config(bg='gray20')
                 label.config(fg='white')
-
-            for entry in self.__allEntry:
-                entry.config(bg='ghost white')
-                entry.config(fg='black')
 
             for button in self.__allButton:
                 button.config(bg='black')
@@ -212,10 +203,6 @@ class Gui_3D_Bio:
             for label in self.__allLabels:
                 label.config(bg='orange')
                 label.config(fg='black')
-
-            for entry in self.__allEntry:
-                entry.config(bg='ghost white')
-                entry.config(fg='black')
 
             for button in self.__allButton:
                 button.config(bg='white')
@@ -289,8 +276,8 @@ class Gui_3D_Bio:
         k_out_scale.pack(side='left')
         self.__allLabels.append(k_out_label)
 
-        self.__allScales.append(k_in_scale)
-        self.__allScales.append(k_out_scale)
+        self.__allEntry.append(k_in_scale)
+        self.__allEntry.append(k_out_scale)
 
     def grid_left_side_widgets(self):
         entryLabelFrame = LabelFrame(self.__leftButtonsFrame,
@@ -357,7 +344,7 @@ class Gui_3D_Bio:
         sphere_radius_label.pack()
         sphere_radius_scale.pack()
         self.__allLabels.append(sphere_radius_label)
-        self.__allScales.append(sphere_radius_scale)
+        self.__allEntry.append(sphere_radius_scale)
 
         for index in range(1):
             space = Label(self.__leftButtonsFrame, text="", bg='orange')
@@ -381,9 +368,57 @@ class Gui_3D_Bio:
         kbs_label.pack()
         kbs_scale.pack()
         self.__allLabels.append(kbs_label)
-        self.__allScales.append(kbs_scale)
+        self.__allEntry.append(kbs_scale)
 
-        for index in range(4):
+        for index in range(1):
+            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space.pack(side='top')
+            self.__allLabels.append(space)
+
+        chains_number_LabelFrame = LabelFrame(self.__leftButtonsFrame,
+                                              text='Argument 6:',
+                                              fg='black', bg='orange',
+                                              font=("Ariel", 10, 'normal'))
+        self.__allLabelFrames.append(chains_number_LabelFrame)
+
+        chains_number_LabelFrame.pack(side='top')
+
+        chainsNumber_label = Label(chains_number_LabelFrame,
+                                   text="Enter Number Of Chains:", bg='orange',
+                                   fg='black', font=("Ariel", 9, 'bold'))
+
+        chains_number_scale = Entry(chains_number_LabelFrame,
+                                    textvariable=self.__chainsNumber, bd=2)
+        chainsNumber_label.pack()
+        chains_number_scale.pack()
+        self.__allLabels.append(chainsNumber_label)
+        self.__allEntry.append(chains_number_scale)
+
+        for index in range(1):
+            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space.pack(side='top')
+            self.__allLabels.append(space)
+
+        amino_amount_LabelFrame = LabelFrame(self.__leftButtonsFrame,
+                                              text='Argument 7:',
+                                              fg='black', bg='orange',
+                                              font=("Ariel", 10, 'normal'))
+        self.__allLabelFrames.append(amino_amount_LabelFrame)
+
+        amino_amount_LabelFrame.pack(side='top')
+
+        amino_amount_label = Label(amino_amount_LabelFrame,
+                                   text="Amino Acid Number:", bg='orange',
+                                   fg='black', font=("Ariel", 9, 'bold'))
+
+        amino_amount_scale = Entry(amino_amount_LabelFrame,
+                                    textvariable=self.__aminoAmount, bd=2)
+        amino_amount_label.pack()
+        amino_amount_scale.pack()
+        self.__allLabels.append(amino_amount_label)
+        self.__allEntry.append(amino_amount_scale)
+
+        for index in range(1):
             space = Label(self.__leftButtonsFrame, text="", bg='orange')
             space.pack(side='top')
             self.__allLabels.append(space)
@@ -406,7 +441,7 @@ class Gui_3D_Bio:
         self.__allLabels.append(stepOne)
 
         fillAllArg = Label(self.__rightButtonsFrame,
-                           text='Fill All The Arguments 1-5', bg='orange',
+                           text='Fill All The Arguments 1-7', bg='orange',
                            font=("Ariel", 7, 'normal'))
         fillAllArg.pack(side='top')
         self.__allLabels.append(fillAllArg)
@@ -416,22 +451,33 @@ class Gui_3D_Bio:
         stepTwo.pack(side='top')
         self.__allLabels.append(stepTwo)
 
-        FillSequence = Label(self.__rightButtonsFrame,
-                             text='Fill Your Sequence', bg='orange',
-                             font=("Ariel", 7, 'normal'))
-        FillSequence.pack(side='top')
-        self.__allLabels.append(FillSequence)
+        placeToSave = Label(self.__rightButtonsFrame,
+                            text='Fill Your Save Location', bg='orange',
+                            font=("Ariel", 7, 'normal'))
+        placeToSave.pack(side='top')
+        self.__allLabels.append(placeToSave)
 
         stepThree = Label(self.__rightButtonsFrame,
                           text='Step Three:', bg='orange')
         stepThree.pack(side='top')
         self.__allLabels.append(stepThree)
 
-        placeToSave = Label(self.__rightButtonsFrame,
-                            text='Fill Your Save Location', bg='orange',
-                            font=("Ariel", 7, 'normal'))
-        placeToSave.pack(side='top')
-        self.__allLabels.append(placeToSave)
+        FillSequence = Label(self.__rightButtonsFrame,
+                             text='Fill Your Sequence', bg='orange',
+                             font=("Ariel", 7, 'normal'))
+        FillSequence.pack(side='top')
+        self.__allLabels.append(FillSequence)
+
+        stepFour = Label(self.__rightButtonsFrame,
+                         text='Step Four:', bg='orange')
+        stepFour.pack(side='top')
+        self.__allLabels.append(stepFour)
+
+        startSimulator = Label(self.__rightButtonsFrame,
+                               text='Press "Start Simulator"', bg='orange',
+                               font=("Ariel", 7, 'normal'))
+        startSimulator.pack(side='top')
+        self.__allLabels.append(startSimulator)
 
         for index in range(1):
             space = Label(self.__rightButtonsFrame, text="", bg='orange')
