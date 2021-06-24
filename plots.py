@@ -121,7 +121,6 @@ def generate_history_plot(data, labels_dict, file_title, plot_title):
     if plot_title:
         ax.set_title(plot_title)
 
-    plt.legend()
     plt.savefig(file_title)
 
 
@@ -138,7 +137,6 @@ def generate_2D_scatter_plot(x, y, labels_dict, file_title, plot_title):
     if plot_title:
         plt.title(plot_title)
 
-    plt.legend()
     plt.savefig(file_title)
 
 
@@ -158,7 +156,6 @@ def generate_3D_scatter_plot(x, y, z, labels_dict, file_title, plot_title):
     if plot_title:
         ax.set_title(plot_title)
 
-    plt.legend()
     plt.savefig(file_title)
 
 
@@ -179,7 +176,6 @@ def generate_2D_N_plots(x, y, labels_dict, file_title, plot_title, no_start):
     if plot_title:
         plt.title(plot_title)
 
-    plt.legend()
     plt.savefig(file_title)
 
 
@@ -196,7 +192,6 @@ def generate_2D_plot(x, y, labels_dict, file_title, plot_title):
     if plot_title:
         plt.title(plot_title)
 
-    # plt.legend()
     plt.savefig(file_title)
 
 
@@ -261,6 +256,7 @@ def distribution_of_beads_locations(iter_chains, T_ns, T_ns_threshold):
     # centers = C[i][j] -> center of j'th chain in i'th iteration
     no_start = (T_ns > T_ns_threshold)
 
+    iter_chains = back_to_XYZs(iter_chains)
     centers = [[calculate_center_of_mass(chain) for chain in
                 chains_on_cur_iteration] for
                chains_on_cur_iteration in iter_chains]
