@@ -115,10 +115,13 @@ class ProteinChainFactory:
     def nres_per_bead(self): return self._nres_per_bead
 
     def _create_bead(self,
-                     name: str):
+                     name: str,
+                     init_coord: IMP.algebra.Vector3D = None):
         p = IMP.Particle(self.model, name)
         p_as_xyzr = IMP.core.XYZR.setup_particle(
             p)  # A Decorator design pattern - adding functionality to an object at run time (~run-time inheritance)
+        if init_coord is not None:
+            p_as_xyzr.set_coordinates(init_coord)
         p_as_xyzr.set_coordinates_are_optimized(True)
         p_as_xyzr.set_radius(self.default_radius_A)
         IMP.atom.Mass.setup_particle(p, FAKE_MASS)  # required by Hierarchy
@@ -170,7 +173,10 @@ class ProteinChainFactory:
         n = len(sequence)
         nbeads = max(1, round(n / self.nres_per_bead))
         beads = []
+        init_locations = []
         for i in range(nbeads):
+            #TODO create location
+
             bead = self._create_bead(f"{name}_{i}")
             p_as_h.add_child(bead)
             beads.append(bead)
@@ -181,6 +187,8 @@ class ProteinChainFactory:
                             beads=beads,
                             restraint=restraint,
                             sequence=sequence)
+
+    def check_locations_collision(self, location_to_check, ):
 
 #
 # """## Building a dynamic model - parts, interactions, dynamics
