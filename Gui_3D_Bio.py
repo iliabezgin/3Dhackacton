@@ -15,16 +15,16 @@ class Gui_3D_Bio:
     def __init__(self, root):
         self._root = root
         self.__titleFrame = Frame(root, width=800, height=50,
-                                  bg='orange')
+                                  bg='light blue')
         self.__leftButtonsFrame = Frame(root, width=15, height=750,
-                                        bg='orange')
+                                        bg='light blue')
         self.__rightButtonsFrame = Frame(root, width=15, height=750,
-                                         bg='orange')
+                                         bg='light blue')
         self.__middleTopFrame = Frame(root, width=770, height=130,
-                                      bg='orange')
+                                      bg='light blue')
         self.__middleBottomFrame = Frame(root, width=770, height=650,
                                          bg='grey93')
-        self.__lowBorder = Frame(root, width=800, height=70, bg='orange')
+        self.__lowBorder = Frame(root, width=800, height=70, bg='light blue')
         self.__lowBorder.pack(side='bottom')
 
         self.__givenSequence = tk.StringVar()
@@ -76,7 +76,7 @@ class Gui_3D_Bio:
         self.__titleFrame.pack(side='top', fill='both')
         title = Label(self.__titleFrame, text='Membraneless Organelles Final '
                                               'Project',
-                      font=("Ariel", 15, 'normal'), bg='orange',
+                      font=("Linux Libertine Mono O", 15, 'bold'), bg='light blue',
                       fg='black')
         title.pack()
         self.__allLabels.append(title)
@@ -87,7 +87,7 @@ class Gui_3D_Bio:
 
     def change_mode_button(self):
         for index in range(2):
-            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space = Label(self.__leftButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
@@ -101,7 +101,7 @@ class Gui_3D_Bio:
         self.__allButton.append(changeModeButton)
 
         for index in range(3):
-            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space = Label(self.__leftButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
@@ -115,11 +115,11 @@ class Gui_3D_Bio:
     def grid_entry(self):
         entryLabelFrame = LabelFrame(self.__middleTopFrame,
                                      text='Program Input',
-                                     fg='black', bg='orange',
+                                     fg='black', bg='light blue',
                                      font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(entryLabelFrame)
         entryLabel = Label(entryLabelFrame, text='Enter Sequence:',
-                           bg='orange',
+                           bg='light blue',
                            fg='black', font=("Ariel", 9, 'bold'))
         self.__allLabels.append(entryLabel)
         entryPlace = Entry(entryLabelFrame,
@@ -136,7 +136,7 @@ class Gui_3D_Bio:
         entryPlace.pack(side='top')
 
         for index in range(1):
-            space = Label(entryLabelFrame, text="", bg='orange')
+            space = Label(entryLabelFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
@@ -153,6 +153,8 @@ class Gui_3D_Bio:
         image_label.pack()
 
     def submit_input(self):
+        random_init_flag = False
+        random_diff_type = False
         for label in self.__informativeLabels:
             label.pack_forget()
 
@@ -162,12 +164,19 @@ class Gui_3D_Bio:
         simulationRunLabel.pack(side='top')
         self.__informativeLabels.append(simulationRunLabel)
 
+        if self.__randomInitCheckBoxStatus.get() == 1:
+            random_init_flag = True
+
+        if self.__diffChainsCheckBoxStatus.get() == 1:
+            random_diff_type = True
+
         T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber.get(),
                                                                   self.__locationToSave.get(),
                                                                   self.__beadRadiusSize.get(),
                                                                   self.__sphereRadiusSize.get(),
                                                                   self.__kbsValue.get(), self.__aminoAmount.get(),
-                                                                  self.__kInSize.get(), self.__kOutSize.get())
+                                                                  self.__kInSize.get(), self.__kOutSize.get(),
+                                                                  random_init_flag, random_diff_type)
 
         if self.__firstCheckBoxStatus.get() == 1:
             firstPlotLabel = Label(self.__middleBottomFrame,
@@ -220,22 +229,6 @@ class Gui_3D_Bio:
         endOfRunLabel.pack(side='top')
         self.__informativeLabels.append(endOfRunLabel)
 
-        if self.__randomInitCheckBoxStatus.get() == 1:
-            randomInitLabel = Label(self.__middleBottomFrame,
-                                   text='Random Init: On',
-                                   fg='blue', bg='grey93', font=("Ariel", 8, 'normal'))
-            randomInitLabel.pack(side='top')
-            self.__informativeLabels.append(randomInitLabel)
-            #random init function call <<
-
-        if self.__diffChainsCheckBoxStatus.get() == 1:
-            diffChainsLabel = Label(self.__middleBottomFrame,
-                                   text='Different Chains Type: On',
-                                   fg='blue', bg='grey93', font=("Ariel", 8, 'normal'))
-            diffChainsLabel.pack(side='top')
-            self.__informativeLabels.append(diffChainsLabel)
-            #random init function call <<
-
     def dark_light_switch(self):
 
         if self.__lightMode:
@@ -261,14 +254,14 @@ class Gui_3D_Bio:
 
             self.__lightMode = False
         else:
-            self.__titleFrame.configure(background='orange')
-            self.__leftButtonsFrame.configure(background='orange')
-            self.__rightButtonsFrame.configure(background='orange')
-            self.__middleTopFrame.configure(background='orange')
-            self.__lowBorder.configure(background='orange')
+            self.__titleFrame.configure(background='light blue')
+            self.__leftButtonsFrame.configure(background='light blue')
+            self.__rightButtonsFrame.configure(background='light blue')
+            self.__middleTopFrame.configure(background='light blue')
+            self.__lowBorder.configure(background='light blue')
 
             for label in self.__allLabels:
-                label.config(bg='orange')
+                label.config(bg='light blue')
                 label.config(fg='black')
 
             for button in self.__allButton:
@@ -276,70 +269,70 @@ class Gui_3D_Bio:
                 button.config(fg='black')
 
             for labelFrame in self.__allLabelFrames:
-                labelFrame.config(bg='orange')
+                labelFrame.config(bg='light blue')
                 labelFrame['fg'] = 'black'
 
             for checkBox in self.__allCheckBoxes:
-                checkBox.config(bg='orange')
+                checkBox.config(bg='light blue')
 
             self.__lightMode = True
 
     def grid_plot_checkboxes(self):
 
         plot_label = Label(self.__rightButtonsFrame, text='Select Your Plots:',
-                           bg='orange')
+                           bg='light blue')
         plot_label.pack(side='top')
         self.__allLabels.append(plot_label)
 
         for index in range(1):
-            space = Label(self.__rightButtonsFrame, text="", bg='orange')
+            space = Label(self.__rightButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         firstCheckBox = Checkbutton(self.__rightButtonsFrame, text='Energy Over Time',
                                     variable=self.__firstCheckBoxStatus,
-                                    bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+                                    bg='light blue', fg='red', font=("Ariel", 7, 'normal'))
         firstCheckBox.pack(side='top')
         self.__allCheckBoxes.append(firstCheckBox)
 
         secondCheckBox = Checkbutton(self.__rightButtonsFrame,
                                      text='End to End Distances',
                                      variable=self.__secondCheckBoxStatus,
-                                     bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+                                     bg='light blue', fg='red', font=("Ariel", 7, 'normal'))
         secondCheckBox.pack(side='top')
         self.__allCheckBoxes.append(secondCheckBox)
 
         thirdCheckBox = Checkbutton(self.__rightButtonsFrame,
                                     text='Energy Distribution',
                                     variable=self.__thirdCheckBoxStatus,
-                                    bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+                                    bg='light blue', fg='red', font=("Ariel", 7, 'normal'))
         thirdCheckBox.pack(side='top')
         self.__allCheckBoxes.append(thirdCheckBox)
 
         fourthCheckBox = Checkbutton(self.__rightButtonsFrame,
                                      text='Location Distribution',
                                      variable=self.__fourthCheckBoxStatus,
-                                     bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+                                     bg='light blue', fg='red', font=("Ariel", 7, 'normal'))
         fourthCheckBox.pack(side='top')
         self.__allCheckBoxes.append(fourthCheckBox)
 
         fifthCheckBox = Checkbutton(self.__rightButtonsFrame,
                                     text='Beads Location',
                                     variable=self.__fifthCheckBoxStatus,
-                                    bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+                                    bg='light blue', fg='red', font=("Ariel", 7, 'normal'))
         fifthCheckBox.pack(side='top')
         self.__allCheckBoxes.append(fifthCheckBox)
 
     def grid_scales(self):
         k_in_LabelFrame = LabelFrame(self.__middleTopFrame,
                                      text='Argument 1:',
-                                     fg='black', bg='orange',
+                                     fg='black', bg='light blue',
                                      font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(k_in_LabelFrame)
 
         k_out_LabelFrame = LabelFrame(self.__middleTopFrame,
                                       text='Argument 2:',
-                                      fg='black', bg='orange',
+                                      fg='black', bg='light blue',
                                       font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(k_out_LabelFrame)
 
@@ -347,7 +340,7 @@ class Gui_3D_Bio:
         k_out_LabelFrame.pack(side='left')
 
         k_in_label = Label(k_in_LabelFrame, text="K-In:",
-                           bg='orange', fg='black', font=("Ariel", 9, 'bold'))
+                           bg='light blue', fg='black', font=("Ariel", 9, 'bold'))
         k_in_scale = Entry(k_in_LabelFrame,
                            textvariable=self.__kInSize, bd=2)
         k_in_label.pack(side='left')
@@ -355,7 +348,7 @@ class Gui_3D_Bio:
         self.__allLabels.append(k_in_label)
 
         k_out_label = Label(k_out_LabelFrame,
-                            text="K-Out:", bg='orange',
+                            text="K-Out:", bg='light blue',
                             fg='black', font=("Ariel", 9, 'bold'))
 
         k_out_scale = Entry(k_out_LabelFrame,
@@ -370,11 +363,11 @@ class Gui_3D_Bio:
     def grid_left_side_widgets(self):
         entryLabelFrame = LabelFrame(self.__leftButtonsFrame,
                                      text='Output Save Location',
-                                     fg='black', bg='orange',
+                                     fg='black', bg='light blue',
                                      font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(entryLabelFrame)
         entryLabel = Label(entryLabelFrame, text='Enter Name For RMF:',
-                           bg='orange',
+                           bg='light blue',
                            fg='black', font=("Ariel", 9, 'bold'))
         self.__allLabels.append(entryLabel)
         entryPlace = Entry(entryLabelFrame,
@@ -386,20 +379,20 @@ class Gui_3D_Bio:
         entryPlace.pack(side='top')
 
         for index in range(1):
-            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space = Label(self.__leftButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         bead_radius_LabelFrame = LabelFrame(self.__leftButtonsFrame,
                                             text='Argument 3:',
-                                            fg='black', bg='orange',
+                                            fg='black', bg='light blue',
                                             font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(bead_radius_LabelFrame)
 
         bead_radius_LabelFrame.pack(side='top')
 
         bead_radius_label = Label(bead_radius_LabelFrame,
-                                  text="Enter Bead Radius:", bg='orange',
+                                  text="Enter Bead Radius:", bg='light blue',
                                   fg='black', font=("Ariel", 9, 'bold'))
 
         bead_radius_entry = Entry(bead_radius_LabelFrame,
@@ -411,20 +404,20 @@ class Gui_3D_Bio:
         self.__allEntry.append(bead_radius_entry)
 
         for index in range(1):
-            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space = Label(self.__leftButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         sphere_radius_LabelFrame = LabelFrame(self.__leftButtonsFrame,
                                               text='Argument 4:',
-                                              fg='black', bg='orange',
+                                              fg='black', bg='light blue',
                                               font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(sphere_radius_LabelFrame)
 
         sphere_radius_LabelFrame.pack(side='top')
 
         sphere_radius_label = Label(sphere_radius_LabelFrame,
-                                    text="Enter Sphere Radius:", bg='orange',
+                                    text="Enter Sphere Radius:", bg='light blue',
                                     fg='black', font=("Ariel", 9, 'bold'))
 
         sphere_radius_scale = Entry(sphere_radius_LabelFrame,
@@ -435,20 +428,20 @@ class Gui_3D_Bio:
         self.__allEntry.append(sphere_radius_scale)
 
         for index in range(1):
-            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space = Label(self.__leftButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         kbs_LabelFrame = LabelFrame(self.__leftButtonsFrame,
                                     text='Argument 5:',
-                                    fg='black', bg='orange',
+                                    fg='black', bg='light blue',
                                     font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(kbs_LabelFrame)
 
         kbs_LabelFrame.pack(side='top')
 
         kbs_label = Label(kbs_LabelFrame,
-                          text="Enter KBS:", bg='orange',
+                          text="Enter KBS:", bg='light blue',
                           fg='black', font=("Ariel", 9, 'bold'))
 
         kbs_scale = Entry(kbs_LabelFrame,
@@ -459,20 +452,20 @@ class Gui_3D_Bio:
         self.__allEntry.append(kbs_scale)
 
         for index in range(1):
-            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space = Label(self.__leftButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         chains_number_LabelFrame = LabelFrame(self.__leftButtonsFrame,
                                               text='Argument 6:',
-                                              fg='black', bg='orange',
+                                              fg='black', bg='light blue',
                                               font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(chains_number_LabelFrame)
 
         chains_number_LabelFrame.pack(side='top')
 
         chainsNumber_label = Label(chains_number_LabelFrame,
-                                   text="Enter Number Of Chains:", bg='orange',
+                                   text="Enter Number Of Chains:", bg='light blue',
                                    fg='black', font=("Ariel", 9, 'bold'))
 
         chains_number_scale = Entry(chains_number_LabelFrame,
@@ -483,20 +476,20 @@ class Gui_3D_Bio:
         self.__allEntry.append(chains_number_scale)
 
         for index in range(1):
-            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space = Label(self.__leftButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         amino_amount_LabelFrame = LabelFrame(self.__leftButtonsFrame,
                                              text='Argument 7:',
-                                             fg='black', bg='orange',
+                                             fg='black', bg='light blue',
                                              font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(amino_amount_LabelFrame)
 
         amino_amount_LabelFrame.pack(side='top')
 
         amino_amount_label = Label(amino_amount_LabelFrame,
-                                   text="Amino Acid Number:", bg='orange',
+                                   text="Amino Acid Number:", bg='light blue',
                                    fg='black', font=("Ariel", 9, 'bold'))
 
         amino_amount_scale = Entry(amino_amount_LabelFrame,
@@ -507,113 +500,143 @@ class Gui_3D_Bio:
         self.__allEntry.append(amino_amount_scale)
 
         for index in range(1):
-            space = Label(self.__leftButtonsFrame, text="", bg='orange')
+            space = Label(self.__leftButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
     def grid_instructions(self):
 
         for index in range(2):
-            space = Label(self.__rightButtonsFrame, text="", bg='orange')
+            space = Label(self.__rightButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         random_init_LabelFrame = LabelFrame(self.__rightButtonsFrame,
                                             text='Argument 8:',
-                                            fg='black', bg='orange',
+                                            fg='black', bg='light blue',
                                             font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(random_init_LabelFrame)
 
         random_init_LabelFrame.pack(side='top')
 
-        random_init_checkbox = Checkbutton(random_init_LabelFrame, text='Random Init',
+        random_init_checkbox = Checkbutton(random_init_LabelFrame, text='Is Centered?',
                                            variable=self.__randomInitCheckBoxStatus,
-                                           bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+                                           bg='light blue', fg='red', font=("Ariel", 7, 'normal'))
         random_init_checkbox.pack(side='top')
         self.__allCheckBoxes.append(random_init_checkbox)
 
         for index in range(1):
-            space = Label(self.__rightButtonsFrame, text="", bg='orange')
+            space = Label(self.__rightButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         diff_chains_type_LabelFrame = LabelFrame(self.__rightButtonsFrame,
                                                  text='Argument 9:',
-                                                 fg='black', bg='orange',
+                                                 fg='black', bg='light blue',
                                                  font=("Ariel", 10, 'normal'))
         self.__allLabelFrames.append(diff_chains_type_LabelFrame)
 
         diff_chains_type_LabelFrame.pack(side='top')
 
-        diff_chains_checkbox = Checkbutton(diff_chains_type_LabelFrame, text='Diff Chains Type',
+        diff_chains_checkbox = Checkbutton(diff_chains_type_LabelFrame, text='Two Groups?',
                                            variable=self.__diffChainsCheckBoxStatus,
-                                           bg='orange', fg='red', font=("Ariel", 7, 'normal'))
+                                           bg='light blue', fg='red', font=("Ariel", 7, 'normal'))
         diff_chains_checkbox.pack(side='top')
         self.__allCheckBoxes.append(diff_chains_checkbox)
 
         for index in range(2):
-            space = Label(self.__rightButtonsFrame, text="", bg='orange')
+            space = Label(self.__rightButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         quickInstructions = Label(self.__rightButtonsFrame,
-                                  text='Quick Instructions:', bg='orange')
+                                  text='Quick Instructions:', bg='light blue')
         quickInstructions.pack(side='top')
         self.__allLabels.append(quickInstructions)
 
         stepOne = Label(self.__rightButtonsFrame,
-                        text='Step One:', bg='orange')
+                        text='Step One:', bg='light blue')
         stepOne.pack(side='top')
         self.__allLabels.append(stepOne)
 
         fillAllArg = Label(self.__rightButtonsFrame,
-                           text='Fill All The Arguments 1-9', bg='orange',
+                           text='Fill All The Arguments 1-9', bg='light blue',
                            font=("Ariel", 7, 'normal'))
         fillAllArg.pack(side='top')
         self.__allLabels.append(fillAllArg)
 
         stepTwo = Label(self.__rightButtonsFrame,
-                        text='Step Two:', bg='orange')
+                        text='Step Two:', bg='light blue')
         stepTwo.pack(side='top')
         self.__allLabels.append(stepTwo)
 
         placeToSave = Label(self.__rightButtonsFrame,
-                            text='Fill Your File Name', bg='orange',
+                            text='Fill Your File Name', bg='light blue',
                             font=("Ariel", 7, 'normal'))
         placeToSave.pack(side='top')
         self.__allLabels.append(placeToSave)
 
         stepThree = Label(self.__rightButtonsFrame,
-                          text='Step Three:', bg='orange')
+                          text='Step Three:', bg='light blue')
         stepThree.pack(side='top')
         self.__allLabels.append(stepThree)
 
         FillSequence = Label(self.__rightButtonsFrame,
-                             text='Fill Your Sequence', bg='orange',
+                             text='Fill Your Sequence', bg='light blue',
                              font=("Ariel", 7, 'normal'))
         FillSequence.pack(side='top')
         self.__allLabels.append(FillSequence)
 
         stepFour = Label(self.__rightButtonsFrame,
-                         text='Step Four:', bg='orange')
+                         text='Step Four:', bg='light blue')
         stepFour.pack(side='top')
         self.__allLabels.append(stepFour)
 
         startSimulator = Label(self.__rightButtonsFrame,
-                               text='Press "Start Simulator"', bg='orange',
+                               text='Press "Start Simulator"', bg='light blue',
                                font=("Ariel", 7, 'normal'))
         startSimulator.pack(side='top')
         self.__allLabels.append(startSimulator)
 
         for index in range(1):
-            space = Label(self.__rightButtonsFrame, text="", bg='orange')
+            space = Label(self.__rightButtonsFrame, text="", bg='light blue')
             space.pack(side='top')
             self.__allLabels.append(space)
 
         enjoy = Label(self.__rightButtonsFrame,
-                      text='Enjoy!', bg='orange')
+                      text='Enjoy!', bg='light blue')
         enjoy.pack(side='top')
         self.__allLabels.append(enjoy)
+
+        ilia = Label(self.__rightButtonsFrame,
+                     text='Ilia Bezgin', bg='light blue',
+                     font=("Ariel", 6, 'normal'))
+        ilia.pack(side='bottom')
+        self.__allLabels.append(ilia)
+
+        rina = Label(self.__rightButtonsFrame,
+                     text='Rina Karnauch', bg='light blue',
+                     font=("Ariel", 6, 'normal'))
+        rina.pack(side='bottom')
+        self.__allLabels.append(rina)
+
+        roy = Label(self.__rightButtonsFrame,
+                    text='Roy Maman', bg='light blue',
+                    font=("Ariel", 6, 'normal'))
+        roy.pack(side='bottom')
+        self.__allLabels.append(roy)
+
+        ofek = Label(self.__rightButtonsFrame,
+                     text='Ofek Kaveh', bg='light blue',
+                     font=("Ariel", 6, 'normal'))
+        ofek.pack(side='bottom')
+        self.__allLabels.append(ofek)
+
+        by = Label(self.__rightButtonsFrame,
+                   text='By:', bg='light blue',
+                   font=("Ariel", 7, 'normal'))
+        by.pack(side='bottom')
+        self.__allLabels.append(by)
 
 
 def main():
