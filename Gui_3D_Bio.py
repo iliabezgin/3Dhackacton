@@ -11,6 +11,7 @@ DARK_MODE_DEFAULT_FONT_COLOR = 'white'
 CHECKBOX_DEFAULT_FONT_COLOR = 'red'
 DEFAULT_FONT = "Ariel"
 DEFAULT_FONT_SIZE = 10
+DEFAULT_DIRECTION = 'top'
 
 
 def quit_program():
@@ -45,6 +46,7 @@ class Gui_3D_Bio:
     """
     Main gui class for the program 
     """
+
     def __init__(self, root):
         self._root = root
         self._titleFrame = Frame(root, width=800, height=50,
@@ -225,7 +227,7 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self.normalLabelCreateAndPack(self._titleFrame, 'top', 'Membraneless Organelles Final Project',
+        self.normalLabelCreateAndPack(self._titleFrame, DEFAULT_DIRECTION, 'Membraneless Organelles Final Project',
                                       ("Linux Libertine Mono O", 15, 'bold'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
     def mainFramesInit(self):
@@ -234,11 +236,11 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self._titleFrame.pack(side='top', fill='both')
+        self._titleFrame.pack(side=DEFAULT_DIRECTION, fill='both')
         self._leftButtonsFrame.pack(side='left', fill='both')
         self._rightButtonsFrame.pack(side="right", fill='both')
         self._middleTopFrame.pack(fill='both')
-        self._middleBottomFrame.pack(side='top', fill='both')
+        self._middleBottomFrame.pack(side=DEFAULT_DIRECTION, fill='both')
 
         self.titleCreation()
 
@@ -248,18 +250,18 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self.spaceCreation(self._leftButtonsFrame, 2, 'top', FRAME_COLOR)
+        self.spaceCreation(self._leftButtonsFrame, 2, DEFAULT_DIRECTION, FRAME_COLOR)
 
         self.buttonCreateAndPack(self._leftButtonsFrame, 'Dark/Light Mode', 1, 15, (DEFAULT_FONT, DEFAULT_FONT_SIZE,
                                                                                     'bold'),
                                  DARK_MODE_DEFAULT_FONT_COLOR,
-                                 lambda: self.darkLightSwitch(), 'top')
+                                 lambda: self.darkLightSwitch(), DEFAULT_DIRECTION)
 
-        self.spaceCreation(self._leftButtonsFrame, 3, 'top', FRAME_COLOR)
+        self.spaceCreation(self._leftButtonsFrame, 3, DEFAULT_DIRECTION, FRAME_COLOR)
 
         self.buttonCreateAndPack(self._leftButtonsFrame, 'Exit', 1, 15, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'bold'),
                                  DARK_MODE_DEFAULT_FONT_COLOR,
-                                 lambda: quit(), 'top')
+                                 lambda: quit(), DEFAULT_DIRECTION)
 
     def gridEntry(self):
         """
@@ -271,15 +273,15 @@ class Gui_3D_Bio:
                                                   DEFAULT_FONT_COLOR, FRAME_COLOR,
                                                   (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'left')
 
-        self.normalLabelCreateAndPack(entryLabelFrame, 'top', 'Enter Sequence:', (DEFAULT_FONT, 9, 'bold'),
+        self.normalLabelCreateAndPack(entryLabelFrame, DEFAULT_DIRECTION, 'Enter Sequence:', (DEFAULT_FONT, 9, 'bold'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.entryCreateAndPack(entryLabelFrame, self._givenSequence, 2, 'top')
+        self.entryCreateAndPack(entryLabelFrame, self._givenSequence, 2, DEFAULT_DIRECTION)
 
-        self.spaceCreation(entryLabelFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(entryLabelFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
         self.buttonCreateAndPack(entryLabelFrame, 'Start Simulation', 1, 15, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'bold'),
-                                 DARK_MODE_DEFAULT_FONT_COLOR, lambda: self.submitInput(), 'top')
+                                 DARK_MODE_DEFAULT_FONT_COLOR, lambda: self.submitInput(), DEFAULT_DIRECTION)
 
     def checkValidity(self):
         """
@@ -317,11 +319,12 @@ class Gui_3D_Bio:
         if not self.checkValidity():
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
                                                'Invalid Input Given. Hint: Negative Argument',
-                                               'blue', 'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
+                                               'blue', 'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                               DEFAULT_DIRECTION)
             return
 
         self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Running Simulation!', 'blue', 'grey93',
-                                           (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), side='top')
+                                           (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), side=DEFAULT_DIRECTION)
 
         if self._randomInitCheckBoxStatus.get() == 1:
             random_init_flag = True
@@ -336,39 +339,39 @@ class Gui_3D_Bio:
 
         if self._firstCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Energy Over Time Plot...',
-                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), 'top')
+                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.simulation_energy_over_time(E, T_ns, 1)
             pop_up_plot_window("energy_graph.png")
 
         if self._secondCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating End To End Over Time Plot...',
-                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), 'top')
+                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.end_to_end_distances_over_time(D, T_ns, 1)
             pop_up_plot_window("distances_graph.png")
 
         if self._thirdCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
                                                'Generating Distribution Of Energy Over Time Plot...', 'blue', 'grey93',
-                                               (DEFAULT_FONT, 9, 'normal'), 'top')
+                                               (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.distribution_of_energy_over_time(E, T_ns, 1)
             pop_up_plot_window("dist_of_E.png")
 
         if self._fourthCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
                                                'Generating Distribution Of Distances Over Time Plot...', 'blue',
-                                               'grey93', (DEFAULT_FONT, 9, 'normal'), 'top')
+                                               'grey93', (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.distribution_of_dist_over_time(D)
             pop_up_plot_window("dist_of_D.png")
 
         if self._fifthCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Distribution Of Bead Locations...',
-                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), 'top')
+                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
             pop_up_plot_window("variance_of_centers.png")
 
         self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Simulating is Over, Check Out Your Plots', 'blue',
-                                           'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
-    
+                                           'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), DEFAULT_DIRECTION)
+
     def configureFramesToDark(self):
         """
         The method will configure the frame into Dark Mode
@@ -458,25 +461,30 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Select Your Plots:', (DEFAULT_FONT, 9, 'normal'),
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Select Your Plots:',
+                                      (DEFAULT_FONT, 9, 'normal'),
                                       bg=FRAME_COLOR, fg=DEFAULT_FONT_COLOR)
 
-        self.spaceCreation(self._rightButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._rightButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Energy Over Time', self._firstCheckBoxStatus,
-                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'),
+                                   DEFAULT_DIRECTION)
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'End to End Distances', self._secondCheckBoxStatus,
-                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'),
+                                   DEFAULT_DIRECTION)
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Energy Distribution', self._thirdCheckBoxStatus,
-                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'),
+                                   DEFAULT_DIRECTION)
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Location Distribution', self._fourthCheckBoxStatus,
-                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'),
+                                   DEFAULT_DIRECTION)
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Beads Location', self._fifthCheckBoxStatus, FRAME_COLOR,
-                                   CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
+                                   CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), DEFAULT_DIRECTION)
 
     def gridArguments(self):
         """
@@ -507,66 +515,72 @@ class Gui_3D_Bio:
 
         """
         entryLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Output Save Location', DEFAULT_FONT_COLOR,
-                                                  FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
+                                                  FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                                  DEFAULT_DIRECTION)
 
-        self.normalLabelCreateAndPack(entryLabelFrame, 'top', 'Enter Name For RMF:', (DEFAULT_FONT, 9, 'bold'),
-                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
+        self.normalLabelCreateAndPack(entryLabelFrame, DEFAULT_DIRECTION, 'Enter Name For RMF:',
+                                      (DEFAULT_FONT, 9, 'bold'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.entryCreateAndPack(entryLabelFrame, self._locationToSave, 2, 'top')
+        self.entryCreateAndPack(entryLabelFrame, self._locationToSave, 2, DEFAULT_DIRECTION)
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._leftButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
         beadRadiusLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 3:', DEFAULT_FONT_COLOR,
-                                                       FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
+                                                       FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                                       DEFAULT_DIRECTION)
 
-        self.normalLabelCreateAndPack(beadRadiusLabelFrame, 'top', "Enter Bead Radius:", (DEFAULT_FONT, 9, 'bold'),
+        self.normalLabelCreateAndPack(beadRadiusLabelFrame, DEFAULT_DIRECTION, "Enter Bead Radius:",
+                                      (DEFAULT_FONT, 9, 'bold'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.entryCreateAndPack(beadRadiusLabelFrame, self._beadRadiusSize, 2, 'top')
+        self.entryCreateAndPack(beadRadiusLabelFrame, self._beadRadiusSize, 2, DEFAULT_DIRECTION)
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._leftButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
         sphereRadiusLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 4:', DEFAULT_FONT_COLOR,
                                                          FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
-                                                         'top')
+                                                         DEFAULT_DIRECTION)
 
-        self.normalLabelCreateAndPack(sphereRadiusLabelFrame, 'top', "Enter Sphere Radius:", (DEFAULT_FONT, 9, 'bold'),
+        self.normalLabelCreateAndPack(sphereRadiusLabelFrame, DEFAULT_DIRECTION, "Enter Sphere Radius:",
+                                      (DEFAULT_FONT, 9, 'bold'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.entryCreateAndPack(sphereRadiusLabelFrame, self._sphereRadiusSize, 2, 'top')
+        self.entryCreateAndPack(sphereRadiusLabelFrame, self._sphereRadiusSize, 2, DEFAULT_DIRECTION)
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._leftButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
         kbsLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 5:', DEFAULT_FONT_COLOR, FRAME_COLOR,
-                                                (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
+                                                (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), DEFAULT_DIRECTION)
 
-        self.normalLabelCreateAndPack(kbsLabelFrame, 'top', "Enter KBS:", (DEFAULT_FONT, 9, 'bold'),
+        self.normalLabelCreateAndPack(kbsLabelFrame, DEFAULT_DIRECTION, "Enter KBS:", (DEFAULT_FONT, 9, 'bold'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.entryCreateAndPack(kbsLabelFrame, self._kbsValue, 2, 'top')
+        self.entryCreateAndPack(kbsLabelFrame, self._kbsValue, 2, DEFAULT_DIRECTION)
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._leftButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
         chainsNumberLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 6:', DEFAULT_FONT_COLOR,
                                                          FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
-                                                         'top')
+                                                         DEFAULT_DIRECTION)
 
-        self.normalLabelCreateAndPack(chainsNumberLabelFrame, 'top', "Enter Number Of Chains:",
+        self.normalLabelCreateAndPack(chainsNumberLabelFrame, DEFAULT_DIRECTION, "Enter Number Of Chains:",
                                       (DEFAULT_FONT, 9, 'bold'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.entryCreateAndPack(chainsNumberLabelFrame, self._chainsNumber, 2, 'top')
+        self.entryCreateAndPack(chainsNumberLabelFrame, self._chainsNumber, 2, DEFAULT_DIRECTION)
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._leftButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
         aminoNumberLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 7:', DEFAULT_FONT_COLOR,
-                                                        FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
+                                                        FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                                        DEFAULT_DIRECTION)
 
-        self.normalLabelCreateAndPack(aminoNumberLabelFrame, 'top', "Amino Acid Number:", (DEFAULT_FONT, 9, 'bold'),
+        self.normalLabelCreateAndPack(aminoNumberLabelFrame, DEFAULT_DIRECTION, "Amino Acid Number:",
+                                      (DEFAULT_FONT, 9, 'bold'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.entryCreateAndPack(aminoNumberLabelFrame, self._aminoAmount, 2, 'top')
+        self.entryCreateAndPack(aminoNumberLabelFrame, self._aminoAmount, 2, DEFAULT_DIRECTION)
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._leftButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
     def gridInstructions(self):
         """
@@ -574,64 +588,71 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self.spaceCreation(self._rightButtonsFrame, 2, 'top', FRAME_COLOR)
+        self.spaceCreation(self._rightButtonsFrame, 2, DEFAULT_DIRECTION, FRAME_COLOR)
 
         randomInitLabelFrame = self.labelFrameCreation(self._rightButtonsFrame, 'Argument 8:', DEFAULT_FONT_COLOR,
-                                                       FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
+                                                       FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                                       DEFAULT_DIRECTION)
 
         self.checkBoxCreateAndPack(randomInitLabelFrame, 'Is Centered?', self._randomInitCheckBoxStatus,
-                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'),
+                                   DEFAULT_DIRECTION)
 
-        self.spaceCreation(self._rightButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._rightButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
-        self.spaceCreation(self._rightButtonsFrame, 2, 'top', FRAME_COLOR)
+        self.spaceCreation(self._rightButtonsFrame, 2, DEFAULT_DIRECTION, FRAME_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Quick Instructions:',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Quick Instructions:',
                                       (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step One:', (DEFAULT_FONT, DEFAULT_FONT_SIZE,
-                                                                                    'normal'), FRAME_COLOR,
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Step One:',
+                                      (DEFAULT_FONT, DEFAULT_FONT_SIZE,
+                                       'normal'), FRAME_COLOR,
                                       DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Fill All The Arguments 1-8',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Fill All The Arguments 1-8',
                                       (DEFAULT_FONT, 7, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step Two:',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Step Two:',
                                       (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Fill Your File Name',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Fill Your File Name',
                                       (DEFAULT_FONT, 7, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step Three:',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Step Three:',
                                       (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Fill Your Sequence',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Fill Your Sequence',
                                       (DEFAULT_FONT, 7, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step Four:',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Step Four:',
                                       (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Press "Start Simulator"',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Press "Start Simulator"',
                                       (DEFAULT_FONT, 7, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.spaceCreation(self._rightButtonsFrame, 1, 'top', FRAME_COLOR)
+        self.spaceCreation(self._rightButtonsFrame, 1, DEFAULT_DIRECTION, FRAME_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Enjoy!',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Enjoy!',
                                       (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Ilia Bezgin', (DEFAULT_FONT, 6, 'normal'),
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Ilia Bezgin',
+                                      (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Rina Karnauch', (DEFAULT_FONT, 6, 'normal'),
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Rina Karnauch',
+                                      (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Roy Maman', (DEFAULT_FONT, 6, 'normal'),
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Roy Maman',
+                                      (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Ofek Kaveh', (DEFAULT_FONT, 6, 'normal'),
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Ofek Kaveh',
+                                      (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'By:', (DEFAULT_FONT, 6, 'normal'),
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'By:', (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
 
