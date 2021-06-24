@@ -22,7 +22,7 @@ def generate_file_ending(k_out, sphere_radius):
     kout = f'{k_out:.3f}'
     spr_rad = f'{sphere_radius:.3f}'
 
-    current_string = "kout=" + kout + "_" + "spr_rad=" + spr_rad
+    current_string = "kout_" + kout + "_" + "spr_rad_" + spr_rad
     return current_string
 
 
@@ -40,7 +40,7 @@ def load_pickles_to_arrays(k_out, sphere_radius):
         D = pickle.load(f)
     with open(cwd + '/chain_on_iterations_' + current + ".pkl", 'rb') as f:
         chains_on_iterations = pickle.load(f)
-        chains_on_iterations = back_to_XYZs(chains_on_iterations)
+        #chains_on_iterations = back_to_XYZs(chains_on_iterations)
     return T_ns, E, D, chains_on_iterations
 
 
@@ -272,3 +272,22 @@ def distribution_of_beads_locations(iter_chains, T_ns, T_ns_threshold):
                       'y': r'variance of center of mass'},
                      "variance_of_centers",
                      "Var(time) graph")
+
+
+def check_file_existing(k_out, sphere_radius,full_path):
+    """
+    check file existence is current folder
+    """
+    cwd = full_path
+    file_names = ['/T_ns_', '/Energy_', '/Distance-e-to-e_',
+                  '/chain_on_iterations_']
+
+    kout = f'{k_out:.3f}'
+    spr_rad = f'{sphere_radius:.3f}'
+
+    current = "kout_" + kout + "_" + "spr_rad_" + spr_rad
+    for file_name in file_names:
+        #print (cwd + file_name + current + ".pkl")
+        if not os.path.exists(cwd + file_name + current + ".pkl"):
+            return False
+    return True
