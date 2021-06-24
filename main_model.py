@@ -213,14 +213,14 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains,
     kout = f'{k_out:.3f}'
     spr_rad = f'{sphere_radius:.3f}'
 
-    create_pickle_from_array(T_ns, "T_ns_" + "kout=" +
-                             kout + "_" + "spr_rad=" + spr_rad, cwd)
-    create_pickle_from_array(E, "Energy_" + "kout=" +
-                             kout + "_" + "spr_rad=" + spr_rad, cwd)
-    create_pickle_from_array(D, "Distance-e-to-e_" + "kout=" +
-                             kout + "_" + "spr_rad=" + spr_rad, cwd)
-    create_pickle_from_array(C, "chain_on_iterations_" + "kout=" +
-                             kout + "_" + "spr_rad=" + spr_rad, cwd)
+    create_pickle_from_array(T_ns, "T_ns_" + "kout_" +
+                             kout + "_" + "spr_rad_" + spr_rad, cwd)
+    create_pickle_from_array(E, "Energy_" + "kout_" +
+                             kout + "_" + "spr_rad_" + spr_rad, cwd)
+    create_pickle_from_array(D, "Distance-e-to-e_" + "kout_" +
+                             kout + "_" + "spr_rad_" + spr_rad, cwd)
+    create_pickle_from_array(C, "chain_on_iterations_" + "kout_" +
+                             kout + "_" + "spr_rad_" + spr_rad, cwd)
 
     return T_ns, E, D, chains_on_iteration
 

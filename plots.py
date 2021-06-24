@@ -22,7 +22,7 @@ def generate_file_ending(k_out, sphere_radius):
     kout = f'{k_out:.3f}'
     spr_rad = f'{sphere_radius:.3f}'
 
-    current_string = "kout=" + kout + "_" + "spr_rad=" + spr_rad
+    current_string = "kout_" + kout + "_" + "spr_rad_" + spr_rad
     return current_string
 
 
