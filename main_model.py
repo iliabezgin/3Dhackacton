@@ -4,7 +4,7 @@ bd_step_size_fs = 1000.0  # simulation time step in femotoseconds (10^-15 sec)
 
 
 def create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs,
-                 nres_per_bead, k_in, k_out):
+                 nres_per_bead, k_in, k_out, is_center=True):
     """## Building a dynamic model - parts, interactions, dynamics
     OK, let's begin by building our first dynamic model!
     As we learned in class, a dynamic model stands on three pillars:
@@ -45,7 +45,7 @@ def create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs,
     # nchains = 2
     chains = []
     for i in range(nchains):
-        chain = protein_chain_factory.create(seq, f"{label}_{i}")
+        chain = protein_chain_factory.create(seq, f"{label}_{i}", is_center)
         chains.append(chain)
 
     """### Keep chains in a hierarchical data structure
@@ -222,17 +222,17 @@ sphere_radius = 50 * bead_radius
 IS_DEBUG_K = False
 kbs = 0.1
 k_in = 5.0
-k_out = 0.1
+k_out = 0.05
 if IS_DEBUG_K:
     kbs = -kbs
-nchains = 5
+nchains = 2
 nres_per_bead = 20
-
+is_center = False
 rmf_filename = f"my_trajectory_br{bead_radius}_sr{sphere_radius}_kbs{kbs}_kin{k_in}_kout{k_out}_nchains{nchains}_nres_per_bead{nres_per_bead}.rmf"
 seq = "MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPI" \
       "APEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAF" \
       "GSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA"
 # seq = "MSDQSQEPTMEEILASIRRI"
 
-# T_ns, E, D, chains_on_iteration = create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs, nres_per_bead, k_in, k_out)
+# T_ns, E, D, chains_on_iteration = create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs, nres_per_bead, k_in, k_out, is_center)
 # x=0
