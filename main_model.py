@@ -1,6 +1,16 @@
 from dynamics import *
+import pickle
+import os
 
 bd_step_size_fs = 1000.0  # simulation time step in femotoseconds (10^-15 sec)
+
+
+def create_pickle_from_array(np_array, file_name, save_path):
+    """
+    method to save pickles array
+    """
+    pickle.dump(np_array,
+                open(os.path.join(save_path, file_name + ".pkl"), "wb"))
 
 
 def create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs,
@@ -172,7 +182,7 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains,
     E = []  # energy
     D = [[] for chain in chains]
     chains_on_iteration = []
-    n_outer = 50000  # outer loop number of iterations
+    n_outer = 5000  # outer loop number of iterations
     n_inner = 250  # optimization per iteration
 
     for i in range(n_outer):
@@ -189,13 +199,29 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains,
             D[i].append(distance)
         chains_on_iteration.append(generate_vecs_of_beads(chains))
 
-
     print(f"FINISHED. Simulated for {time_ns:.1f} nanoseconds in total.")
 
     rmf.flush()  # make sure RMF file is properly saved
     T_ns = np.array(T_ns)  # this will be convenient later
     E = np.array(E)  # likewise
     D = np.array(D)
+    C = np.array(chains_on_iteration)
+
+    # pickling array
+
+    cwd = os.getcwd()
+    kout = f'{k_out:.3f}'
+    spr_rad = f'{sphere_radius:.3f}'
+
+    create_pickle_from_array(T_ns, "T_ns_" + "kout=" +
+                             kout + "_" + "spr_rad=" + spr_rad, cwd)
+    create_pickle_from_array(E, "Energy_" + "kout=" +
+                             kout + "_" + "spr_rad=" + spr_rad, cwd)
+    create_pickle_from_array(D, "Distance-e-to-e_" + "kout=" +
+                             kout + "_" + "spr_rad=" + spr_rad, cwd)
+    create_pickle_from_array(C, "chain_on_iterations_" + "kout=" +
+                             kout + "_" + "spr_rad=" + spr_rad, cwd)
+
     return T_ns, E, D, chains_on_iteration
 
 
@@ -213,9 +239,11 @@ def generate_vecs_of_beads(chains):
     vecs_of_chains = []
     for chain in chains:
         for bead in chain.beads:
-            vecs_of_beads.append(IMP.core.XYZ(bead).get_coordinates())
+            vecs_of_beads.append(np.array(IMP.core.XYZ(
+                bead).get_coordinates()))
         vecs_of_chains.append(vecs_of_beads)
     return vecs_of_chains
+
 
 bead_radius = 10.0
 sphere_radius = 50 * bead_radius

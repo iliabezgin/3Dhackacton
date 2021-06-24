@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sn
 import pandas as pd
 
+
 ###################### pickling it up ######################
 
 def load_pickles_to_arrays():
@@ -48,6 +49,15 @@ def back_to_XYZs(chains_on_iterations):
         # and all of the chains of current iter we add to array of iterations
         n_chains_on_iterations.append(n_chains_on_iters)
     return n_chains_on_iterations
+
+
+def var_array_generator(centers):
+    for cen in centers:
+        iteration_var = np.var(np.array(cen))
+        vars.append(iteration_var)
+
+    vars = np.array(vars)
+    return vars
 
 
 ###################### helpers ######################
@@ -230,12 +240,7 @@ def distribution_of_beads_locations(iter_chains, T_ns, T_ns_threshold):
                 chains_on_cur_iteration] for
                chains_on_cur_iteration in iter_chains]
 
-    for cen in centers:
-        iteration_var = np.var(np.array(cen))
-        vars.append(iteration_var)
-
-    vars = np.array(vars)
-
+    vars = var_array_generator(centers)
     # the plot itself
     generate_2D_plot(T_ns[no_start], vars[no_start],
                      {'x': r'time [$ns$]',
