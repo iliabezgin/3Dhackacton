@@ -1,24 +1,24 @@
 from tkinter import *
 import tkinter as tk
 
-# import main_model
-# import plots
-# from PIL import ImageTk, Image
+import main_model
+import plots
+from PIL import ImageTk, Image
 
 
 def quit_program():
     quit()
 
 
-# def pop_up_plot_window(path):
-#     window = tk.Toplevel()
-#     window.wm_title("Plot")
-#     window.configure(background='grey')
-#
-#     img = ImageTk.PhotoImage(Image.open(path))
-#     image_label = Label(window, image=img)
-#     image_label.photo = img
-#     image_label.pack()
+def pop_up_plot_window(path):
+    window = tk.Toplevel()
+    window.wm_title("Plot")
+    window.configure(background='grey')
+
+    img = ImageTk.PhotoImage(Image.open(path))
+    image_label = Label(window, image=img)
+    image_label.photo = img
+    image_label.pack()
 
 
 class Gui_3D_Bio:
@@ -183,45 +183,45 @@ class Gui_3D_Bio:
         if self._diffChainsCheckBoxStatus.get() == 1:
             random_diff_type = True
 
-        # T_ns, E, D, chains_on_iteration = main_model.create_model(self._givenSequence.get(), self._chainsNumber.get(),
-        #                                                           self._locationToSave.get(),
-        #                                                           self._beadRadiusSize.get(),
-        #                                                           self._sphereRadiusSize.get(),
-        #                                                           self._kbsValue.get(), self._aminoAmount.get(),
-        #                                                           self._kInSize.get(), self._kOutSize.get(),
-        #                                                           random_init_flag, random_diff_type)
-        #
-        # if self._firstCheckBoxStatus.get() == 1:
-        #     self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Energy Over Time Plot...',
-        #                                        'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
-        #     plots.simulation_energy_over_time(E, T_ns, 1)
-        #     pop_up_plot_window("energy_graph.png")
-        #
-        # if self._secondCheckBoxStatus.get() == 1:
-        #     self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating End To End Over Time Plot...',
-        #                                        'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
-        #     plots.end_to_end_distances_over_time(D, T_ns, 1)
-        #     pop_up_plot_window("distances_graph.png")
-        #
-        # if self._thirdCheckBoxStatus.get() == 1:
-        #     self.informativeLabelCreateAndPack(self._middleBottomFrame,
-        #                                        'Generating Distribution Of Energy Over Time Plot...', 'blue', 'grey93',
-        #                                        ("Ariel", 9, 'normal'), 'top')
-        #     plots.distribution_of_energy_over_time(E, T_ns, 1)
-        #     pop_up_plot_window("dist_of_E.png")
-        #
-        # if self._fourthCheckBoxStatus.get() == 1:
-        #     self.informativeLabelCreateAndPack(self._middleBottomFrame,
-        #                                        'Generating Distribution Of Distances Over Time Plot...', 'blue',
-        #                                        'grey93', ("Ariel", 9, 'normal'), 'top')
-        #     plots.distribution_of_dist_over_time(D)
-        #     pop_up_plot_window("dist_of_D.png")
-        #
-        # if self._fifthCheckBoxStatus.get() == 1:
-        #     self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Distribution Of Bead Locations...',
-        #                                        'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
-        #     plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
-        #     pop_up_plot_window("variance_of_centers.png")
+        T_ns, E, D, chains_on_iteration = main_model.create_model(self._givenSequence.get(), self._chainsNumber.get(),
+                                                                  self._locationToSave.get(),
+                                                                  self._beadRadiusSize.get(),
+                                                                  self._sphereRadiusSize.get(),
+                                                                  self._kbsValue.get(), self._aminoAmount.get(),
+                                                                  self._kInSize.get(), self._kOutSize.get(),
+                                                                  random_init_flag, random_diff_type)
+
+        if self._firstCheckBoxStatus.get() == 1:
+            self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Energy Over Time Plot...',
+                                               'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
+            plots.simulation_energy_over_time(E, T_ns, 1)
+            pop_up_plot_window("energy_graph.png")
+
+        if self._secondCheckBoxStatus.get() == 1:
+            self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating End To End Over Time Plot...',
+                                               'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
+            plots.end_to_end_distances_over_time(D, T_ns, 1)
+            pop_up_plot_window("distances_graph.png")
+
+        if self._thirdCheckBoxStatus.get() == 1:
+            self.informativeLabelCreateAndPack(self._middleBottomFrame,
+                                               'Generating Distribution Of Energy Over Time Plot...', 'blue', 'grey93',
+                                               ("Ariel", 9, 'normal'), 'top')
+            plots.distribution_of_energy_over_time(E, T_ns, 1)
+            pop_up_plot_window("dist_of_E.png")
+
+        if self._fourthCheckBoxStatus.get() == 1:
+            self.informativeLabelCreateAndPack(self._middleBottomFrame,
+                                               'Generating Distribution Of Distances Over Time Plot...', 'blue',
+                                               'grey93', ("Ariel", 9, 'normal'), 'top')
+            plots.distribution_of_dist_over_time(D)
+            pop_up_plot_window("dist_of_D.png")
+
+        if self._fifthCheckBoxStatus.get() == 1:
+            self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Distribution Of Bead Locations...',
+                                               'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
+            plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
+            pop_up_plot_window("variance_of_centers.png")
 
         self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Simulating is Over, Check Out Your Plots', 'blue',
                                            'grey93', ("Ariel", 10, 'normal'), 'top')
