@@ -141,6 +141,12 @@ class Gui_3D_Bio:
         for label in self.__informativeLabels:
             label.pack_forget()
 
+        simulationRunLabel = Label(self.__middleBottomFrame,
+                                   text='Running Simulation!',
+                                   fg='blue', bg='grey93')
+        simulationRunLabel.pack(side='top')
+        self.__informativeLabels.append(simulationRunLabel)
+
         T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber,
                                                                   self.__locationToSave.get(),
                                                                   self.__beadRadiusSize.get(),
