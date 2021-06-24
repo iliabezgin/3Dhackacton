@@ -110,7 +110,7 @@ def generate_2D_plot(x, y, labels_dict, file_title, plot_title):
     if plot_title:
         plt.title(plot_title)
 
-    plt.legend()
+    # plt.legend()
     plt.savefig(file_title)
 
 
@@ -173,12 +173,15 @@ def distribution_of_beads_locations(iter_chains, T_ns, T_ns_threshold):
     centers = [[calculate_center_of_mass(chain) for chain in
                 chains_on_cur_iteration] for
                chains_on_cur_iteration in iter_chains]
+
     for cen in centers:
         iteration_var = np.var(np.array(cen))
         vars.append(iteration_var)
 
+    vars = np.array(vars)
+
     # the plot itself
-    generate_2D_plot(T_ns[no_start], vars,
+    generate_2D_plot(T_ns[no_start], vars[no_start],
                      {'x': r'time [$ns$]',
                       'y': r'variance of center of mass'},
                      "variance_of_centers",
@@ -187,23 +190,8 @@ def distribution_of_beads_locations(iter_chains, T_ns, T_ns_threshold):
 
 # functions for new plots
 
-
-def calculate_distance_in_xyz(vector):
-    """
-    distance of vector from (0,0,0)
-    """
-    x, y, z = vector[0], vector[1], vector[2]
-    x, y, z = x ** 2, y ** 2, z ** 2
-    return math.sqrt(x + y + z)
-
-
-def calculate_center_of_mass(chain):
+def calculate_center_of_mass(chainVecs: IMP.algebra.Vector3Ds):
     """
     calculate center of mass of current chain position
     """
-    D = IMP.algebra.Vector3D(0, 0, 0)
-    M = len(chain.beads)
-    for bead in chain.beads:
-        coords = IMP.core.XYZ(bead)
-        D += coords.get_coordinates()
-    return calculate_distance_in_xyz(D / M)
+    return IMP.algebra.get_centroid(chainVecs)
