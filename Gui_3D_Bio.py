@@ -1,7 +1,6 @@
 from tkinter import *
 import tkinter as tk
 
-
 import main_model
 import plots
 from PIL import ImageTk, Image
@@ -9,6 +8,17 @@ from PIL import ImageTk, Image
 
 def quit_program():
     quit()
+
+
+def pop_up_plot(path):
+    window = tk.Toplevel()
+    window.wm_title("Plot")
+    window.configure(background='grey')
+
+    img = ImageTk.PhotoImage(Image.open(path))
+    image_label = Label(window, image=img)
+    image_label.photo = img
+    image_label.pack()
 
 
 class Gui_3D_Bio:
@@ -142,21 +152,38 @@ class Gui_3D_Bio:
 
         submitButton.pack(side='top')
 
-    def pop_up_plot(self, path):
-        window = tk.Toplevel()
-        window.wm_title("Plot")
-        window.configure(background='grey')
+    def check_validity(self):
 
-        img = ImageTk.PhotoImage(Image.open(path))
-        image_label = Label(window, image=img)
-        image_label.photo = img
-        image_label.pack()
+        if self.__kInSize.get() < 0:
+            return False
+        if self.__kOutSize.get() < 0:
+            return False
+        if self.__beadRadiusSize.get() < 0:
+            return False
+        if self.__sphereRadiusSize.get() < 0:
+            return False
+        if self.__kbsValue.get() < 0:
+            return False
+        if self.__chainsNumber.get() < 0:
+            return False
+        if self.__aminoAmount.get() < 0:
+            return False
+        return True
 
     def submit_input(self):
         random_init_flag = False
         random_diff_type = False
+
         for label in self.__informativeLabels:
             label.pack_forget()
+
+        if not self.check_validity():
+            invalidInputLabel = Label(self.__middleBottomFrame,
+                                      text='Invalid Input Given. Hint: Negative Argument',
+                                      fg='blue', bg='grey93', font=("Ariel", 10, 'normal'))
+            invalidInputLabel.pack(side='top')
+            self.__informativeLabels.append(invalidInputLabel)
+            return
 
         simulationRunLabel = Label(self.__middleBottomFrame,
                                    text='Running Simulation!',
@@ -185,7 +212,7 @@ class Gui_3D_Bio:
             firstPlotLabel.pack(side='top')
             self.__informativeLabels.append(firstPlotLabel)
             plots.simulation_energy_over_time(E, T_ns, 1)
-            self.pop_up_plot("energy_graph.png")
+            pop_up_plot("energy_graph.png")
 
         if self.__secondCheckBoxStatus.get() == 1:
             secondPlotLabel = Label(self.__middleBottomFrame,
@@ -194,7 +221,7 @@ class Gui_3D_Bio:
             secondPlotLabel.pack(side='top')
             self.__informativeLabels.append(secondPlotLabel)
             plots.end_to_end_distances_over_time(E, T_ns, 1)
-            self.pop_up_plot("distances_graph.png")
+            pop_up_plot("distances_graph.png")
 
         if self.__thirdCheckBoxStatus.get() == 1:
             thirdPlotLabel = Label(self.__middleBottomFrame,
@@ -203,7 +230,7 @@ class Gui_3D_Bio:
             thirdPlotLabel.pack(side='top')
             self.__informativeLabels.append(thirdPlotLabel)
             plots.distribution_of_energy_over_time(E, T_ns, 1)
-            self.pop_up_plot("dist_of_E.png")
+            pop_up_plot("dist_of_E.png")
 
         if self.__fourthCheckBoxStatus.get() == 1:
             fourthPlotLabel = Label(self.__middleBottomFrame,
@@ -212,7 +239,7 @@ class Gui_3D_Bio:
             fourthPlotLabel.pack(side='top')
             self.__informativeLabels.append(fourthPlotLabel)
             plots.distribution_of_dist_over_time(D)
-            self.pop_up_plot("dist_of_D.png")
+            pop_up_plot("dist_of_D.png")
 
         if self.__fifthCheckBoxStatus.get() == 1:
             fifthPlotLabel = Label(self.__middleBottomFrame,
@@ -221,7 +248,7 @@ class Gui_3D_Bio:
             fifthPlotLabel.pack(side='top')
             self.__informativeLabels.append(fifthPlotLabel)
             plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
-            self.pop_up_plot("variance_of_centers.png")
+            pop_up_plot("variance_of_centers.png")
 
         endOfRunLabel = Label(self.__middleBottomFrame,
                               text='Simulating is Over, Check Out Your Plots',
