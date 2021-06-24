@@ -1,7 +1,7 @@
 from tkinter import *
 import tkinter as tk
-#import main_model
-#import plots
+import main_model
+import plots
 
 
 def quit_program():
@@ -141,12 +141,12 @@ class Gui_3D_Bio:
         for label in self.__informativeLabels:
             label.pack_forget()
 
-        # T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber,
-        #                                                           self.__locationToSave.get(),
-        #                                                           self.__beadRadiusSize.get(),
-        #                                                           self.__sphereRadiusSize.get(),
-        #                                                           self.__kbsValue.get(), self.__aminoAmount,
-        #                                                           self.__kInSize.get(), self.__kOutSize.get())
+        T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber,
+                                                                  self.__locationToSave.get(),
+                                                                  self.__beadRadiusSize.get(),
+                                                                  self.__sphereRadiusSize.get(),
+                                                                  self.__kbsValue.get(), self.__aminoAmount,
+                                                                  self.__kInSize.get(), self.__kOutSize.get())
 
         if self.__firstCheckBoxStatus.get() == 1:
             firstPlotLabel = Label(self.__middleBottomFrame,
@@ -154,7 +154,7 @@ class Gui_3D_Bio:
                                    fg='blue', bg='grey93')
             firstPlotLabel.pack(side='top')
             self.__informativeLabels.append(firstPlotLabel)
-            # plots.simulation_energy_over_time(E, T_ns, 1)
+            plots.simulation_energy_over_time(E, T_ns, 1)
 
         if self.__secondCheckBoxStatus.get() == 1:
             secondPlotLabel = Label(self.__middleBottomFrame,
@@ -162,7 +162,7 @@ class Gui_3D_Bio:
                                     fg='blue', bg='grey93')
             secondPlotLabel.pack(side='top')
             self.__informativeLabels.append(secondPlotLabel)
-            # plots.end_to_end_distances_over_time(E, T_ns, 1)
+            plots.end_to_end_distances_over_time(E, T_ns, 1)
 
         if self.__thirdCheckBoxStatus.get() == 1:
             thirdPlotLabel = Label(self.__middleBottomFrame,
@@ -170,7 +170,7 @@ class Gui_3D_Bio:
                                    fg='blue', bg='grey93')
             thirdPlotLabel.pack(side='top')
             self.__informativeLabels.append(thirdPlotLabel)
-            # plots.distribution_of_energy_over_time(E, T_ns, 1)
+            plots.distribution_of_energy_over_time(E, T_ns, 1)
 
         if self.__fourthCheckBoxStatus.get() == 1:
             fourthPlotLabel = Label(self.__middleBottomFrame,
@@ -178,7 +178,7 @@ class Gui_3D_Bio:
                                     fg='blue', bg='grey93')
             fourthPlotLabel.pack(side='top')
             self.__informativeLabels.append(fourthPlotLabel)
-            # plots.distribution_of_dist_over_time(D)
+            plots.distribution_of_dist_over_time(D)
 
         if self.__fifthCheckBoxStatus.get() == 1:
             fifthPlotLabel = Label(self.__middleBottomFrame,
@@ -186,7 +186,7 @@ class Gui_3D_Bio:
                                    fg='blue', bg='grey93')
             fifthPlotLabel.pack(side='top')
             self.__informativeLabels.append(fifthPlotLabel)
-            # plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
+            plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
 
         endOfRunLabel = Label(self.__middleBottomFrame,
                               text='Simulating is Over, Check Out Your Plots',
