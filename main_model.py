@@ -184,9 +184,6 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains,
         T_ns.append(time_ns)  # keep time
         E.append(bd.get_last_score())  # keep energy
         for i, chain in enumerate(chains):  # keep distances for each chain
-            xyz_1 = IMP.core.XYZ(chain.beads[0])
-            xyz_2 = IMP.core.XYZ(chain.beads[-1])
-            xyz_m = xyz_1.get_coordinates() - xyz_2.get_coordinates()
             distance = IMP.core.get_distance(IMP.core.XYZ(chain.beads[0]),
                                              IMP.core.XYZ(chain.beads[-1]))
             D[i].append(distance)
