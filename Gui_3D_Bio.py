@@ -5,6 +5,13 @@ import main_model
 import plots
 from PIL import ImageTk, Image
 
+FRAME_COLOR = 'light blue'
+DEFAULT_FONT_COLOR = 'black'
+DARK_MODE_DEFAULT_FONT_COLOR = 'white'
+CHECKBOX_DEFAULT_FONT_COLOR = 'red'
+DEFAULT_FONT = "Ariel"
+DEFAULT_FONT_SIZE = 10
+
 
 def quit_program():
     """
@@ -41,16 +48,16 @@ class Gui_3D_Bio:
     def __init__(self, root):
         self._root = root
         self._titleFrame = Frame(root, width=800, height=50,
-                                 bg='light blue')
+                                 bg=FRAME_COLOR)
         self._leftButtonsFrame = Frame(root, width=15, height=750,
-                                       bg='light blue')
+                                       bg=FRAME_COLOR)
         self._rightButtonsFrame = Frame(root, width=15, height=750,
-                                        bg='light blue')
+                                        bg=FRAME_COLOR)
         self._middleTopFrame = Frame(root, width=770, height=130,
-                                     bg='light blue')
+                                     bg=FRAME_COLOR)
         self._middleBottomFrame = Frame(root, width=770, height=650,
                                         bg='grey93')
-        self._lowBorder = Frame(root, width=800, height=70, bg='light blue')
+        self._lowBorder = Frame(root, width=800, height=70, bg=FRAME_COLOR)
         self._lowBorder.pack(side='bottom')
         self._givenSequence = tk.StringVar()
         self._firstCheckBoxStatus = tk.IntVar()
@@ -219,7 +226,7 @@ class Gui_3D_Bio:
 
         """
         self.normalLabelCreateAndPack(self._titleFrame, 'top', 'Membraneless Organelles Final Project',
-                                      ("Linux Libertine Mono O", 15, 'bold'), 'light blue', 'black')
+                                      ("Linux Libertine Mono O", 15, 'bold'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
     def mainFramesInit(self):
         """
@@ -241,14 +248,17 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self.spaceCreation(self._leftButtonsFrame, 2, 'top', 'light blue')
+        self.spaceCreation(self._leftButtonsFrame, 2, 'top', FRAME_COLOR)
 
-        self.buttonCreateAndPack(self._leftButtonsFrame, 'Dark/Light Mode', 1, 15, ("Ariel", 10, 'bold'), 'white',
+        self.buttonCreateAndPack(self._leftButtonsFrame, 'Dark/Light Mode', 1, 15, (DEFAULT_FONT, DEFAULT_FONT_SIZE,
+                                                                                    'bold'),
+                                 DARK_MODE_DEFAULT_FONT_COLOR,
                                  lambda: self.darkLightSwitch(), 'top')
 
-        self.spaceCreation(self._leftButtonsFrame, 3, 'top', 'light blue')
+        self.spaceCreation(self._leftButtonsFrame, 3, 'top', FRAME_COLOR)
 
-        self.buttonCreateAndPack(self._leftButtonsFrame, 'Exit', 1, 15, ("Ariel", 10, 'bold'), 'white',
+        self.buttonCreateAndPack(self._leftButtonsFrame, 'Exit', 1, 15, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'bold'),
+                                 DARK_MODE_DEFAULT_FONT_COLOR,
                                  lambda: quit(), 'top')
 
     def gridEntry(self):
@@ -257,18 +267,19 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        entryLabelFrame = self.labelFrameCreation(self._middleTopFrame, 'Program Input', 'black', 'light blue',
-                                                  ("Ariel", 10, 'normal'), 'left')
+        entryLabelFrame = self.labelFrameCreation(self._middleTopFrame, 'Program Input',
+                                                  DEFAULT_FONT_COLOR, FRAME_COLOR,
+                                                  (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'left')
 
-        self.normalLabelCreateAndPack(entryLabelFrame, 'top', 'Enter Sequence:', ("Ariel", 9, 'bold'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(entryLabelFrame, 'top', 'Enter Sequence:', (DEFAULT_FONT, 9, 'bold'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(entryLabelFrame, self._givenSequence, 2, 'top')
 
-        self.spaceCreation(entryLabelFrame, 1, 'top', 'light blue')
+        self.spaceCreation(entryLabelFrame, 1, 'top', FRAME_COLOR)
 
-        self.buttonCreateAndPack(entryLabelFrame, 'Start Simulation', 1, 15, ("Ariel", 10, 'bold'),
-                                 'white', lambda: self.submitInput(), 'top')
+        self.buttonCreateAndPack(entryLabelFrame, 'Start Simulation', 1, 15, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'bold'),
+                                 DARK_MODE_DEFAULT_FONT_COLOR, lambda: self.submitInput(), 'top')
 
     def checkValidity(self):
         """
@@ -306,11 +317,11 @@ class Gui_3D_Bio:
         if not self.checkValidity():
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
                                                'Invalid Input Given. Hint: Negative Argument',
-                                               'blue', 'grey93', ("Ariel", 10, 'normal'), 'top')
+                                               'blue', 'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
             return
 
         self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Running Simulation!', 'blue', 'grey93',
-                                           ("Ariel", 10, 'normal'), side='top')
+                                           (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), side='top')
 
         if self._randomInitCheckBoxStatus.get() == 1:
             random_init_flag = True
@@ -325,38 +336,38 @@ class Gui_3D_Bio:
 
         if self._firstCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Energy Over Time Plot...',
-                                               'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
+                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), 'top')
             plots.simulation_energy_over_time(E, T_ns, 1)
             pop_up_plot_window("energy_graph.png")
 
         if self._secondCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating End To End Over Time Plot...',
-                                               'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
+                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), 'top')
             plots.end_to_end_distances_over_time(D, T_ns, 1)
             pop_up_plot_window("distances_graph.png")
 
         if self._thirdCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
                                                'Generating Distribution Of Energy Over Time Plot...', 'blue', 'grey93',
-                                               ("Ariel", 9, 'normal'), 'top')
+                                               (DEFAULT_FONT, 9, 'normal'), 'top')
             plots.distribution_of_energy_over_time(E, T_ns, 1)
             pop_up_plot_window("dist_of_E.png")
 
         if self._fourthCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
                                                'Generating Distribution Of Distances Over Time Plot...', 'blue',
-                                               'grey93', ("Ariel", 9, 'normal'), 'top')
+                                               'grey93', (DEFAULT_FONT, 9, 'normal'), 'top')
             plots.distribution_of_dist_over_time(D)
             pop_up_plot_window("dist_of_D.png")
 
         if self._fifthCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Distribution Of Bead Locations...',
-                                               'blue', 'grey93', ("Ariel", 9, 'normal'), 'top')
+                                               'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), 'top')
             plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
             pop_up_plot_window("variance_of_centers.png")
 
         self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Simulating is Over, Check Out Your Plots', 'blue',
-                                           'grey93', ("Ariel", 10, 'normal'), 'top')
+                                           'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
     
     def configureFramesToDark(self):
         """
@@ -378,15 +389,15 @@ class Gui_3D_Bio:
         """
         for label in self._allLabels:
             label.config(bg='gray20')
-            label.config(fg='white')
+            label.config(fg=DARK_MODE_DEFAULT_FONT_COLOR)
 
         for button in self._allButton:
-            button.config(bg='black')
-            button.config(fg='white')
+            button.config(bg=DEFAULT_FONT_COLOR)
+            button.config(fg=DARK_MODE_DEFAULT_FONT_COLOR)
 
         for labelFrame in self._allLabelFrames:
             labelFrame.config(bg='gray20')
-            labelFrame['fg'] = 'white'
+            labelFrame['fg'] = DARK_MODE_DEFAULT_FONT_COLOR
 
         for checkBox in self._allCheckBoxes:
             checkBox.config(bg='gray20')
@@ -397,11 +408,11 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self._titleFrame.configure(background='light blue')
-        self._leftButtonsFrame.configure(background='light blue')
-        self._rightButtonsFrame.configure(background='light blue')
-        self._middleTopFrame.configure(background='light blue')
-        self._lowBorder.configure(background='light blue')
+        self._titleFrame.configure(background=FRAME_COLOR)
+        self._leftButtonsFrame.configure(background=FRAME_COLOR)
+        self._rightButtonsFrame.configure(background=FRAME_COLOR)
+        self._middleTopFrame.configure(background=FRAME_COLOR)
+        self._lowBorder.configure(background=FRAME_COLOR)
 
     def configureWidgetsToLight(self):
         """
@@ -410,19 +421,19 @@ class Gui_3D_Bio:
 
         """
         for label in self._allLabels:
-            label.config(bg='light blue')
-            label.config(fg='black')
+            label.config(bg=FRAME_COLOR)
+            label.config(fg=DEFAULT_FONT_COLOR)
 
         for button in self._allButton:
-            button.config(bg='white')
-            button.config(fg='black')
+            button.config(bg=DARK_MODE_DEFAULT_FONT_COLOR)
+            button.config(fg=DEFAULT_FONT_COLOR)
 
         for labelFrame in self._allLabelFrames:
-            labelFrame.config(bg='light blue')
-            labelFrame['fg'] = 'black'
+            labelFrame.config(bg=FRAME_COLOR)
+            labelFrame['fg'] = DEFAULT_FONT_COLOR
 
         for checkBox in self._allCheckBoxes:
-            checkBox.config(bg='light blue')
+            checkBox.config(bg=FRAME_COLOR)
 
     def darkLightSwitch(self):
         """
@@ -447,25 +458,25 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Select Your Plots:', ("Ariel", 9, 'normal'),
-                                      bg='light blue', fg='black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Select Your Plots:', (DEFAULT_FONT, 9, 'normal'),
+                                      bg=FRAME_COLOR, fg=DEFAULT_FONT_COLOR)
 
-        self.spaceCreation(self._rightButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._rightButtonsFrame, 1, 'top', FRAME_COLOR)
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Energy Over Time', self._firstCheckBoxStatus,
-                                   'light blue', 'red', ("Ariel", 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'End to End Distances', self._secondCheckBoxStatus,
-                                   'light blue', 'red', ("Ariel", 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Energy Distribution', self._thirdCheckBoxStatus,
-                                   'light blue', 'red', ("Ariel", 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
 
         self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Location Distribution', self._fourthCheckBoxStatus,
-                                   'light blue', 'red', ("Ariel", 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
 
-        self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Beads Location', self._fifthCheckBoxStatus, 'light blue',
-                                   'red', ("Ariel", 7, 'normal'), 'top')
+        self.checkBoxCreateAndPack(self._rightButtonsFrame, 'Beads Location', self._fifthCheckBoxStatus, FRAME_COLOR,
+                                   CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
 
     def gridArguments(self):
         """
@@ -473,17 +484,19 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        kInLabelFrame = self.labelFrameCreation(self._middleTopFrame, 'Argument 1:', 'black', 'light blue',
-                                                ("Ariel", 10, 'normal'), 'left')
+        kInLabelFrame = self.labelFrameCreation(self._middleTopFrame, 'Argument 1:', DEFAULT_FONT_COLOR, FRAME_COLOR,
+                                                (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'left')
 
-        kOutLabelFrame = self.labelFrameCreation(self._middleTopFrame, 'Argument 2:', 'black', 'light blue',
-                                                 ("Ariel", 10, 'normal'), 'left')
+        kOutLabelFrame = self.labelFrameCreation(self._middleTopFrame, 'Argument 2:', DEFAULT_FONT_COLOR, FRAME_COLOR,
+                                                 (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'left')
 
-        self.normalLabelCreateAndPack(kInLabelFrame, 'left', "K-In:", ("Ariel", 9, 'bold'), 'light blue', 'black')
+        self.normalLabelCreateAndPack(kInLabelFrame, 'left', "K-In:", (DEFAULT_FONT, 9, 'bold'), FRAME_COLOR,
+                                      DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(kInLabelFrame, self._kInSize, 2, 'left')
 
-        self.normalLabelCreateAndPack(kOutLabelFrame, 'left', "K-Out:", ("Ariel", 9, 'bold'), 'light blue', 'black')
+        self.normalLabelCreateAndPack(kOutLabelFrame, 'left', "K-Out:", (DEFAULT_FONT, 9, 'bold'), FRAME_COLOR,
+                                      DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(kOutLabelFrame, self._kOutSize, 2, 'left')
 
@@ -493,65 +506,67 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        entryLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Output Save Location', 'black', 'light blue',
-                                                  ("Ariel", 10, 'normal'), 'top')
+        entryLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Output Save Location', DEFAULT_FONT_COLOR,
+                                                  FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
 
-        self.normalLabelCreateAndPack(entryLabelFrame, 'top', 'Enter Name For RMF:', ("Ariel", 9, 'bold'), 'light blue',
-                                      'black')
+        self.normalLabelCreateAndPack(entryLabelFrame, 'top', 'Enter Name For RMF:', (DEFAULT_FONT, 9, 'bold'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(entryLabelFrame, self._locationToSave, 2, 'top')
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
 
-        beadRadiusLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 3:', 'black', 'light blue',
-                                                       ("Ariel", 10, 'normal'), 'top')
+        beadRadiusLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 3:', DEFAULT_FONT_COLOR,
+                                                       FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
 
-        self.normalLabelCreateAndPack(beadRadiusLabelFrame, 'top', "Enter Bead Radius:", ("Ariel", 9, 'bold'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(beadRadiusLabelFrame, 'top', "Enter Bead Radius:", (DEFAULT_FONT, 9, 'bold'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(beadRadiusLabelFrame, self._beadRadiusSize, 2, 'top')
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
 
-        sphereRadiusLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 4:', 'black', 'light blue',
-                                                         ("Ariel", 10, 'normal'), 'top')
+        sphereRadiusLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 4:', DEFAULT_FONT_COLOR,
+                                                         FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                                         'top')
 
-        self.normalLabelCreateAndPack(sphereRadiusLabelFrame, 'top', "Enter Sphere Radius:", ("Ariel", 9, 'bold'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(sphereRadiusLabelFrame, 'top', "Enter Sphere Radius:", (DEFAULT_FONT, 9, 'bold'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(sphereRadiusLabelFrame, self._sphereRadiusSize, 2, 'top')
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
 
-        kbsLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 5:', 'black', 'light blue',
-                                                ("Ariel", 10, 'normal'), 'top')
+        kbsLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 5:', DEFAULT_FONT_COLOR, FRAME_COLOR,
+                                                (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
 
-        self.normalLabelCreateAndPack(kbsLabelFrame, 'top', "Enter KBS:", ("Ariel", 9, 'bold'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(kbsLabelFrame, 'top', "Enter KBS:", (DEFAULT_FONT, 9, 'bold'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(kbsLabelFrame, self._kbsValue, 2, 'top')
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
 
-        chainsNumberLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 6:', 'black', 'light blue',
-                                                         ("Ariel", 10, 'normal'), 'top')
+        chainsNumberLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 6:', DEFAULT_FONT_COLOR,
+                                                         FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                                         'top')
 
-        self.normalLabelCreateAndPack(chainsNumberLabelFrame, 'top', "Enter Number Of Chains:", ("Ariel", 9, 'bold'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(chainsNumberLabelFrame, 'top', "Enter Number Of Chains:",
+                                      (DEFAULT_FONT, 9, 'bold'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(chainsNumberLabelFrame, self._chainsNumber, 2, 'top')
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
 
-        aminoNumberLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 7:', 'black', 'light blue',
-                                                        ("Ariel", 10, 'normal'), 'top')
+        aminoNumberLabelFrame = self.labelFrameCreation(self._leftButtonsFrame, 'Argument 7:', DEFAULT_FONT_COLOR,
+                                                        FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
 
-        self.normalLabelCreateAndPack(aminoNumberLabelFrame, 'top', "Amino Acid Number:", ("Ariel", 9, 'bold'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(aminoNumberLabelFrame, 'top', "Amino Acid Number:", (DEFAULT_FONT, 9, 'bold'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.entryCreateAndPack(aminoNumberLabelFrame, self._aminoAmount, 2, 'top')
 
-        self.spaceCreation(self._leftButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._leftButtonsFrame, 1, 'top', FRAME_COLOR)
 
     def gridInstructions(self):
         """
@@ -559,64 +574,65 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        self.spaceCreation(self._rightButtonsFrame, 2, 'top', 'light blue')
+        self.spaceCreation(self._rightButtonsFrame, 2, 'top', FRAME_COLOR)
 
-        randomInitLabelFrame = self.labelFrameCreation(self._rightButtonsFrame, 'Argument 8:', 'black', 'light blue',
-                                                       ("Ariel", 10, 'normal'), 'top')
+        randomInitLabelFrame = self.labelFrameCreation(self._rightButtonsFrame, 'Argument 8:', DEFAULT_FONT_COLOR,
+                                                       FRAME_COLOR, (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), 'top')
 
         self.checkBoxCreateAndPack(randomInitLabelFrame, 'Is Centered?', self._randomInitCheckBoxStatus,
-                                   'light blue', 'red', ("Ariel", 7, 'normal'), 'top')
+                                   FRAME_COLOR, CHECKBOX_DEFAULT_FONT_COLOR, (DEFAULT_FONT, 7, 'normal'), 'top')
 
-        self.spaceCreation(self._rightButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._rightButtonsFrame, 1, 'top', FRAME_COLOR)
 
-        self.spaceCreation(self._rightButtonsFrame, 2, 'top', 'light blue')
+        self.spaceCreation(self._rightButtonsFrame, 2, 'top', FRAME_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Quick Instructions:', ("Ariel", 10, 'normal'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Quick Instructions:',
+                                      (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step One:', ("Ariel", 10, 'normal'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step One:', (DEFAULT_FONT, DEFAULT_FONT_SIZE,
+                                                                                    'normal'), FRAME_COLOR,
+                                      DEFAULT_FONT_COLOR)
 
         self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Fill All The Arguments 1-8',
-                                      ("Ariel", 7, 'normal'), 'light blue', 'black')
+                                      (DEFAULT_FONT, 7, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step Two:',
-                                      ("Ariel", 10, 'normal'), 'light blue', 'black')
+                                      (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Fill Your File Name',
-                                      ("Ariel", 7, 'normal'), 'light blue', 'black')
+                                      (DEFAULT_FONT, 7, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step Three:',
-                                      ("Ariel", 10, 'normal'), 'light blue', 'black')
+                                      (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Fill Your Sequence',
-                                      ("Ariel", 7, 'normal'), 'light blue', 'black')
+                                      (DEFAULT_FONT, 7, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Step Four:',
-                                      ("Ariel", 10, 'normal'), 'light blue', 'black')
+                                      (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
         self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Press "Start Simulator"',
-                                      ("Ariel", 7, 'normal'), 'light blue', 'black')
+                                      (DEFAULT_FONT, 7, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.spaceCreation(self._rightButtonsFrame, 1, 'top', 'light blue')
+        self.spaceCreation(self._rightButtonsFrame, 1, 'top', FRAME_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Enjoy!', ("Ariel", 10, 'normal'), 'light blue',
-                                      'black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Enjoy!',
+                                      (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Ilia Bezgin', ("Ariel", 6, 'normal'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Ilia Bezgin', (DEFAULT_FONT, 6, 'normal'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Rina Karnauch', ("Ariel", 6, 'normal'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Rina Karnauch', (DEFAULT_FONT, 6, 'normal'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Roy Maman', ("Ariel", 6, 'normal'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Roy Maman', (DEFAULT_FONT, 6, 'normal'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Ofek Kaveh', ("Ariel", 6, 'normal'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'Ofek Kaveh', (DEFAULT_FONT, 6, 'normal'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'By:', ("Ariel", 6, 'normal'),
-                                      'light blue', 'black')
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'top', 'By:', (DEFAULT_FONT, 6, 'normal'),
+                                      FRAME_COLOR, DEFAULT_FONT_COLOR)
 
 
 def gui_buttons_and_design_init(program):
