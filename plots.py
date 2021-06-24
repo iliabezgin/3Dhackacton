@@ -1,3 +1,6 @@
+import os
+import pickle
+
 from main_model import *
 from dynamics import *
 
@@ -6,7 +9,6 @@ import matplotlib.pyplot as plt
 import seaborn as sn
 import pandas as pd
 
-
 ###################### pickling it up ######################
 
 def load_pickles_to_arrays():
@@ -14,7 +16,7 @@ def load_pickles_to_arrays():
     method to load pickles to arrays
     """
     cwd = os.getcwd()
-    with open(cwd + '/T_ns_arr.pkl', 'rb') as f:
+    with open(cwd + '/T_ns.pkl', 'rb') as f:
         T_ns = pickle.load(f)
     with open(cwd + '/Energy.pkl', 'rb') as f:
         E = pickle.load(f)
@@ -22,7 +24,30 @@ def load_pickles_to_arrays():
         D = pickle.load(f)
     with open(cwd + '/chain_on_iterations.pkl', 'rb') as f:
         chains_on_iterations = pickle.load(f)
+        chains_on_iterations = back_to_XYZs(chains_on_iterations)
     return T_ns, E, D, chains_on_iterations
+
+
+def back_to_XYZs(chains_on_iterations):
+    """
+    method to turn beads into XYZs again
+    """
+    n_chains_on_iterations = []
+    for current_iteration_chains in chains_on_iterations:
+        # for each iteration
+        n_chains_on_iters = []
+        for chain in current_iteration_chains:
+            # we go through each chain
+            n_chain = []
+            for bead in chain:
+                # and turn each bead into a Vector
+                n_chain.append(IMP.algebra.Vector3D(bead))
+            # so we add the new chain of beads into the current iteration
+            # chains
+            n_chains_on_iters.append(n_chain)
+        # and all of the chains of current iter we add to array of iterations
+        n_chains_on_iterations.append(n_chains_on_iters)
+    return n_chains_on_iterations
 
 
 ###################### helpers ######################
