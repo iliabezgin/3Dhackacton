@@ -182,7 +182,7 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains,
     E = []  # energy
     D = [[] for chain in chains]
     chains_on_iteration = []
-    n_outer = 5000  # outer loop number of iterations
+    n_outer = 50000  # outer loop number of iterations
     n_inner = 250  # optimization per iteration
 
     for i in range(n_outer):
