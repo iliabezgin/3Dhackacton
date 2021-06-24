@@ -158,11 +158,11 @@ class Gui_3D_Bio:
         simulationRunLabel.pack(side='top')
         self.__informativeLabels.append(simulationRunLabel)
 
-        T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber,
+        T_ns, E, D, chains_on_iteration = main_model.create_model(self.__givenSequence.get(), self.__chainsNumber.get(),
                                                                   self.__locationToSave.get(),
                                                                   self.__beadRadiusSize.get(),
                                                                   self.__sphereRadiusSize.get(),
-                                                                  self.__kbsValue.get(), self.__aminoAmount,
+                                                                  self.__kbsValue.get(), self.__aminoAmount.get(),
                                                                   self.__kInSize.get(), self.__kOutSize.get())
 
         if self.__firstCheckBoxStatus.get() == 1:

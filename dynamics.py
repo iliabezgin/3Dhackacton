@@ -188,9 +188,6 @@ class ProteinChainFactory:
                             restraint=restraint,
                             sequence=sequence)
 
-    def check_locations_collision(self, location_to_check, ready_locations):
-        for
-
 #
 # """## Building a dynamic model - parts, interactions, dynamics
 # OK, let's begin by building our first dynamic model!
