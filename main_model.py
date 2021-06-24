@@ -187,7 +187,8 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains,
             distance = IMP.core.get_distance(IMP.core.XYZ(chain.beads[0]),
                                              IMP.core.XYZ(chain.beads[-1]))
             D[i].append(distance)
-        chains_on_iteration.append(chains)
+        chains_on_iteration.append(generate_vecs_of_beads(chains))
+
 
     print(f"FINISHED. Simulated for {time_ns:.1f} nanoseconds in total.")
 
@@ -203,15 +204,28 @@ def get_all_beads(chains):
     return list(beads_set)
 
 
+def generate_vecs_of_beads(chains):
+    """
+    method to create XYZs of chain beads array
+    C[i][j] = XYZ of chain #i bead #j
+    """
+    vecs_of_beads = []
+    vecs_of_chains = []
+    for chain in chains:
+        for bead in chain.beads:
+            vecs_of_beads.append(IMP.core.XYZ(bead).get_coordinates())
+        vecs_of_chains.append(vecs_of_beads)
+    return vecs_of_chains
+
 bead_radius = 10.0
-sphere_radius = 100 * bead_radius
+sphere_radius = 50 * bead_radius
 IS_DEBUG_K = False
 kbs = 0.1
 k_in = 5.0
-k_out = 0.5
+k_out = 0.1
 if IS_DEBUG_K:
     kbs = -kbs
-nchains = 3
+nchains = 5
 nres_per_bead = 20
 
 rmf_filename = f"my_trajectory_br{bead_radius}_sr{sphere_radius}_kbs{kbs}_kin{k_in}_kout{k_out}_nchains{nchains}_nres_per_bead{nres_per_bead}.rmf"
@@ -219,3 +233,6 @@ seq = "MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPI" \
       "APEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAF" \
       "GSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA"
 # seq = "MSDQSQEPTMEEILASIRRI"
+
+# T_ns, E, D, chains_on_iteration = create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs, nres_per_bead, k_in, k_out)
+# x=0
