@@ -126,7 +126,8 @@ def create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs,
                                                              h_root,
                                                              restraints, m,
                                                              chains,
-                                                             sphere_radius)
+                                                             sphere_radius,
+                                                             k_out)
     return T_ns, E, D, chains_on_iteration
 
 
@@ -141,7 +142,7 @@ def start_bd_simulation(rsf, model):
 
 
 def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains,
-                           sphere_radius):
+                           sphere_radius, k_out):
     """#### Making a movie (trajectory) file
     We conclude by telling our simulation to output a trajectory (movie)
     file every 10000 frames. The movie is saved using the [Rich Molecular File format]
@@ -213,14 +214,14 @@ def create_trajectory_file(rmf_filename, bd, h_root, restraints, model, chains,
     kout = f'{k_out:.3f}'
     spr_rad = f'{sphere_radius:.3f}'
 
-    create_pickle_from_array(T_ns, "T_ns_" + "kout=" +
-                             kout + "_" + "spr_rad=" + spr_rad, cwd)
-    create_pickle_from_array(E, "Energy_" + "kout=" +
-                             kout + "_" + "spr_rad=" + spr_rad, cwd)
-    create_pickle_from_array(D, "Distance-e-to-e_" + "kout=" +
-                             kout + "_" + "spr_rad=" + spr_rad, cwd)
-    create_pickle_from_array(C, "chain_on_iterations_" + "kout=" +
-                             kout + "_" + "spr_rad=" + spr_rad, cwd)
+    create_pickle_from_array(T_ns, "T_ns_" + "kout_" +
+                             kout + "_" + "spr_rad_" + spr_rad, cwd)
+    create_pickle_from_array(E, "Energy_" + "kout_" +
+                             kout + "_" + "spr_rad_" + spr_rad, cwd)
+    create_pickle_from_array(D, "Distance-e-to-e_" + "kout_" +
+                             kout + "_" + "spr_rad_" + spr_rad, cwd)
+    create_pickle_from_array(C, "chain_on_iterations_" + "kout_" +
+                             kout + "_" + "spr_rad_" + spr_rad, cwd)
 
     return T_ns, E, D, chains_on_iteration
 
@@ -244,23 +245,22 @@ def generate_vecs_of_beads(chains):
         vecs_of_chains.append(vecs_of_beads)
     return vecs_of_chains
 
-
-bead_radius = 10.0
-sphere_radius = 50 * bead_radius
-IS_DEBUG_K = False
-kbs = 0.1
-k_in = 5.0
-k_out = 0.05
-if IS_DEBUG_K:
-    kbs = -kbs
-nchains = 2
-nres_per_bead = 20
-is_center = False
-rmf_filename = f"my_trajectory_br{bead_radius}_sr{sphere_radius}_kbs{kbs}_kin{k_in}_kout{k_out}_nchains{nchains}_nres_per_bead{nres_per_bead}.rmf"
-seq = "MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPI" \
-      "APEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAF" \
-      "GSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA"
-# seq = "MSDQSQEPTMEEILASIRRI"
-
-# T_ns, E, D, chains_on_iteration = create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs, nres_per_bead, k_in, k_out, is_center)
-# x=0
+# bead_radius = 10.0
+# sphere_radius = 50 * bead_radius
+# IS_DEBUG_K = False
+# kbs = 0.1
+# k_in = 5.0
+# k_out = 0.05
+# if IS_DEBUG_K:
+#     kbs = -kbs
+# nchains = 2
+# nres_per_bead = 20
+# is_center = False
+# rmf_filename = f"my_trajectory_br{bead_radius}_sr{sphere_radius}_kbs{kbs}_kin{k_in}_kout{k_out}_nchains{nchains}_nres_per_bead{nres_per_bead}.rmf"
+# seq = "MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPI" \
+#       "APEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAF" \
+#       "GSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA"
+# # seq = "MSDQSQEPTMEEILASIRRI"
+#
+# # T_ns, E, D, chains_on_iteration = create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs, nres_per_bead, k_in, k_out, is_center)
+# # x=0
