@@ -636,23 +636,23 @@ class Gui_3D_Bio:
         self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Enjoy!',
                                       (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Ilia Bezgin',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'bottom', 'Ilia Bezgin',
                                       (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Rina Karnauch',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'bottom', 'Rina Karnauch',
                                       (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Roy Maman',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'bottom', 'Roy Maman',
                                       (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'Ofek Kaveh',
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'bottom', 'Ofek Kaveh',
                                       (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
-        self.normalLabelCreateAndPack(self._rightButtonsFrame, DEFAULT_DIRECTION, 'By:', (DEFAULT_FONT, 6, 'normal'),
+        self.normalLabelCreateAndPack(self._rightButtonsFrame, 'bottom', 'By:', (DEFAULT_FONT, 6, 'normal'),
                                       FRAME_COLOR, DEFAULT_FONT_COLOR)
 
 
