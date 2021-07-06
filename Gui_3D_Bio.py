@@ -69,14 +69,14 @@ class Gui_3D_Bio:
         self._fifthCheckBoxStatus = tk.IntVar()
         self._randomInitCheckBoxStatus = tk.IntVar()
         self._diffChainsCheckBoxStatus = tk.IntVar()
-        self._kInSize = tk.IntVar()
-        self._kOutSize = tk.IntVar()
-        self._beadRadiusSize = tk.IntVar()
-        self._sphereRadiusSize = tk.IntVar()
-        self._kbsValue = tk.IntVar()
+        self._kInSize = tk.DoubleVar(value=5.0)
+        self._kOutSize = tk.DoubleVar(value=0.1)
+        self._beadRadiusSize = tk.DoubleVar(value=10.0)
+        self._sphereRadiusSize = tk.DoubleVar(value=500.0)
+        self._kbsValue = tk.DoubleVar(value=0.1)
         self._locationToSave = tk.StringVar()
-        self._chainsNumber = tk.IntVar()
-        self._aminoAmount = tk.IntVar()
+        self._chainsNumber = tk.IntVar(value=2)
+        self._aminoAmount = tk.IntVar(value=20)
         self._lightMode = True
         self._allButton = []
         self._allEntry = []
@@ -289,19 +289,19 @@ class Gui_3D_Bio:
         Returns: None
 
         """
-        if self._kInSize.get() < 0:
+        if self._kInSize.get() <= 0:
             return False
-        if self._kOutSize.get() < 0:
+        if self._kOutSize.get() <= 0:
             return False
-        if self._beadRadiusSize.get() < 0:
+        if self._beadRadiusSize.get() <= 0:
             return False
-        if self._sphereRadiusSize.get() < 0:
+        if self._sphereRadiusSize.get() <= 0:
             return False
-        if self._kbsValue.get() < 0:
+        if self._kbsValue.get() <= 0:
             return False
-        if self._chainsNumber.get() < 0:
+        if self._chainsNumber.get() <= 0:
             return False
-        if self._aminoAmount.get() < 0:
+        if self._aminoAmount.get() <= 0:
             return False
         return True
 
@@ -316,11 +316,35 @@ class Gui_3D_Bio:
         for label in self._informativeLabels:
             label.pack_forget()
 
-        if not self.checkValidity():
+        bad_input = False
+        if len(self._locationToSave.get()) < 5:
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
-                                               'Invalid Input Given. Hint: Negative Argument',
+                                               'Invalid Input Given. Hint: File name should be not empty + end with .rmf',
                                                'blue', 'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
                                                DEFAULT_DIRECTION)
+            bad_input = True
+        elif self._locationToSave.get()[-4:] != ".rmf":
+            self.informativeLabelCreateAndPack(self._middleBottomFrame,
+                                               'Invalid Input Given. Hint: File name should end with .rmf',
+                                               'blue', 'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                               DEFAULT_DIRECTION)
+            bad_input = True
+
+        if len(self._givenSequence.get()) <= 0:
+            self.informativeLabelCreateAndPack(self._middleBottomFrame,
+                                               'Invalid Input Given. Hint: Please, enter the sequence',
+                                               'blue', 'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                               DEFAULT_DIRECTION)
+            bad_input = True
+
+        if not self.checkValidity():
+            self.informativeLabelCreateAndPack(self._middleBottomFrame,
+                                               'Invalid Input Given. Hint: Negative or Zero Argument',
+                                               'blue', 'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'),
+                                               DEFAULT_DIRECTION)
+            bad_input = True
+
+        if bad_input:
             return
 
         self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Running Simulation!', 'blue', 'grey93',
@@ -688,3 +712,5 @@ def main():
     root.resizable(False, False)
 
     root.mainloop()
+
+main()

@@ -264,3 +264,5 @@ def generate_vecs_of_beads(chains):
 #
 # # T_ns, E, D, chains_on_iteration = create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs, nres_per_bead, k_in, k_out, is_center)
 # # x=0
+
+# MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPIAPEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAFGSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA
