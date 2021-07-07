@@ -15,79 +15,36 @@ def create_pickle_from_array(np_array, file_name, save_path):
 
 def create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs,
                  nres_per_bead, k_in, k_out, is_center=True):
-    """## Building a dynamic model - parts, interactions, dynamics
-    OK, let's begin by building our first dynamic model!
-    As we learned in class, a dynamic model stands on three pillars:
-    parts, interactions, and dynamics.
-
-    But first we need to construct an [IMP `model`]
-    (https://integrativemodeling.org/2.15.0/doc/ref/classIMP_1_1Model.html):
-    """
 
     m = IMP.Model()
-
-    """### I. Add parts 
-    #### Generate strings of beads
-    In IMP, model parts are called [Particles]
-    (https://integrativemodeling.org/2.15.0/doc/ref/classIMP_1_1Particle.html).
-    The beads in our `ProteinChain` object are such particles - in this case, 
-    they represent physical objects with Cartesian coordinates. 
-
-    To generate two string of beads, we use the `ProteinChainFactory` class
-    `create()` method:  
-    """
 
     protein_chain_factory = ProteinChainFactory \
         (model=m,  # the model in which the beads reside
          default_radius_A=bead_radius,  # radius of a bead
-         k_in=k_in,
-         k_out=k_out,
+         k_in=k_in, # inter beads interaction strength
+         k_out=k_out, # inter strings interaction strength
          # the force coefficient for the spring holding consecutive beads together
          # (large number = stiff spring)
-         relative_rest_distance=3.0,
-         # the resting distance between bead centers, relative to the radius of single bead
-         nres_per_bead=nres_per_bead,
-         kbs=kbs,
-
-         sphere_radius=sphere_radius)  # number of residues per bead in the string-of-beads
+         relative_rest_distance=3.0, # the resting distance between bead centers, relative to the radius of single bead
+         nres_per_bead=nres_per_bead, # number of residues per bead in the string-of-beads
+         kbs=kbs, # interaction strength between beads and bounding sphere
+         sphere_radius=sphere_radius) # bounding sphere radius
 
     label = "popZ"
-    # nchains = 2
     chains = []
     for i in range(nchains):
         chain = protein_chain_factory.create(seq, f"{label}_{i}", is_center)
         chains.append(chain)
 
     """### Keep chains in a hierarchical data structure
-
     Next, we create a hierarchical data structure, in which the two chain descend
-     from a common root particle called `p_root`. Note that ProteinChainFactory made sure that the beads of each chain also descend from a common root `protein_chain.root_as_h`.
-
-
-
+     from a common root particle called `p_root`. 
     """
 
     p_root = IMP.Particle(m, "root")
     h_root = IMP.atom.Hierarchy.setup_particle(p_root)  # decorator
     for chain in chains:
         h_root.add_child(chain.root_as_h)
-
-    """**Explanation**: IMP Particles don't have to represent actual physical 
-    particles. To allow *particle* `p_root` to have children,
-    we [decorate](https://https://en.wikipedia.org/wiki/Decorator_pattern)
-    it using the [`IMP.atom.Hierarchy` class]
-    (https://integrativemodeling.org/2.15.0/doc/ref/classIMP_1_1atom_1_1Hierarchy.html).
-    The [decorator design pattern](https://https://en.wikipedia.org/wiki/Decorator_pattern)
-     adds new functions to existing classes at runtime instead of during compile time. Think about `h_root` as particle `p_root` cast as class Hierarchy.
-
-    ### II. Add interactions
-    Interactions in IMP are created using the concept of a "restraint" acting on a group of particles (a single particle, a pair of particles, etc.). All restraints derive from the class [`Restraint`](https://integrativemodeling.org/2.15.0/doc/ref/classIMP_1_1Restraint.html). 
-
-    We first define an [`ExcludedVolumeRestraint`]
-    (https://integrativemodeling.org/2.15.0/doc/ref/classIMP_1_1core_1_1ExcludedVolumeRestraint.html)
-    object - telling IMP that different beads should not overlap with each other, 
-    at least not too much:
-    """
 
     # Add excluded volume restraints among all (close pairs of) particles:
     evr = IMP.core.ExcludedVolumeRestraint(get_all_beads(chains),
@@ -99,9 +56,6 @@ def create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs,
                                            # a string identifier
                                            )
 
-    """The springs between the beads of each protein chain were already defined by 
-    ProteinChainFactory, so now we create `rsf`, a scoring function 
-    (a.k.a. energy function) made of our restraints."""
 
     restraints = [chain.restraint for chain in chains] + [evr]
     for chain0 in chains:
@@ -116,11 +70,6 @@ def create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs,
     rsf = IMP.core.RestraintsScoringFunction(restraints,
                                              "Scoring function")  # Energy function
 
-    """### III. Add dynamics
-    Finally, we create a [`BrownianDynamics`]
-    (https://integrativemodeling.org/2.15.0/doc/ref/classIMP_1_1atom_1_1BrownianDynamics.html)
-     object, which enables us to simulate our interacting parts:
-    """
     bd = start_bd_simulation(rsf, m)
     T_ns, E, D, chains_on_iteration = create_trajectory_file(rmf_filename, bd,
                                                              h_root,
@@ -245,24 +194,4 @@ def generate_vecs_of_beads(chains):
         vecs_of_chains.append(vecs_of_beads)
     return vecs_of_chains
 
-# bead_radius = 10.0
-# sphere_radius = 50 * bead_radius
-# IS_DEBUG_K = False
-# kbs = 0.1
-# k_in = 5.0
-# k_out = 0.05
-# if IS_DEBUG_K:
-#     kbs = -kbs
-# nchains = 2
-# nres_per_bead = 20
-# is_center = False
-# rmf_filename = f"my_trajectory_br{bead_radius}_sr{sphere_radius}_kbs{kbs}_kin{k_in}_kout{k_out}_nchains{nchains}_nres_per_bead{nres_per_bead}.rmf"
-# seq = "MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPI" \
-#       "APEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAF" \
-#       "GSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA"
-# # seq = "MSDQSQEPTMEEILASIRRI"
-#
-# # T_ns, E, D, chains_on_iteration = create_model(seq, nchains, rmf_filename, bead_radius, sphere_radius, kbs, nres_per_bead, k_in, k_out, is_center)
-# # x=0
 
-# MSDQSQEPTMEEILASIRRIISEDDAPAEPAAEAAPPPPPEPEPEPVSFDDEVLELTDPIAPEPELPPLETVGDIDVYSPPEPESEPAYTPPPAAPVFDRDEVAEQLVGVSAASAAASAFGSLSSALLMPKDGRTLEDVVRELLRPLLKEWLDQNLPRIVETKVEEEVQRISRGRGA

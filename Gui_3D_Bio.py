@@ -365,33 +365,33 @@ class Gui_3D_Bio:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Energy Over Time Plot...',
                                                'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.simulation_energy_over_time(E, T_ns, 1)
-            pop_up_plot_window("energy_graph.png")
+            pop_up_plot_window("temp/energy_graph.png")
 
         if self._secondCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating End To End Over Time Plot...',
                                                'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.end_to_end_distances_over_time(D, T_ns, 1)
-            pop_up_plot_window("distances_graph.png")
+            pop_up_plot_window("temp/distances_graph.png")
 
         if self._thirdCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
                                                'Generating Distribution Of Energy Over Time Plot...', 'blue', 'grey93',
                                                (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.distribution_of_energy_over_time(E, T_ns, 1)
-            pop_up_plot_window("dist_of_E.png")
+            pop_up_plot_window("temp/dist_of_E.png")
 
         if self._fourthCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame,
                                                'Generating Distribution Of Distances Over Time Plot...', 'blue',
                                                'grey93', (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.distribution_of_dist_over_time(D)
-            pop_up_plot_window("dist_of_D.png")
+            pop_up_plot_window("temp/dist_of_D.png")
 
         if self._fifthCheckBoxStatus.get() == 1:
             self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Generating Distribution Of Bead Locations...',
                                                'blue', 'grey93', (DEFAULT_FONT, 9, 'normal'), DEFAULT_DIRECTION)
             plots.distribution_of_beads_locations(chains_on_iteration, T_ns, 1)
-            pop_up_plot_window("variance_of_centers.png")
+            pop_up_plot_window("temp/variance_of_centers.png")
 
         self.informativeLabelCreateAndPack(self._middleBottomFrame, 'Simulating is Over, Check Out Your Plots', 'blue',
                                            'grey93', (DEFAULT_FONT, DEFAULT_FONT_SIZE, 'normal'), DEFAULT_DIRECTION)
@@ -712,5 +712,3 @@ def main():
     root.resizable(False, False)
 
     root.mainloop()
-
-main()
